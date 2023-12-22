@@ -78,22 +78,19 @@ class CartaCorrecaoEletronicaEvento(models.Model):
     protocolo = fields.Char(string="Protocolo", size=60)
 
 
-STATE = {"edit": [("readonly", False)], "draft": [("readonly", False)]}
-
-
 class InutilizedNfe(models.Model):
     _name = "invoice.eletronic.inutilized"
     _description = "NF-e inutilizada"
 
-    name = fields.Char("Nome", required=True, readonly=True, states=STATE)
+    name = fields.Char("Nome", required=True)
     numeration_start = fields.Integer(
-        "Número Inicial", required=True, readonly=True, states=STATE
+        "Número Inicial", required=True
     )
     numeration_end = fields.Integer(
-        "Número Final", required=True, readonly=True, states=STATE
+        "Número Final", required=True
     )
     justificativa = fields.Text(
-        "Justificativa", required=True, readonly=True, states=STATE
+        "Justificativa", required=True
     )
     state = fields.Selection(
         [
@@ -111,8 +108,6 @@ class InutilizedNfe(models.Model):
         [("55", "55 - NFe"), ("65", "65 - NFCe"),],
         string="Modelo",
         required=True,
-        readonly=True,
-        states=STATE,
     )
     serie = fields.Integer(string="Série")
     code = fields.Char(string="Código", size=10)
@@ -122,10 +117,11 @@ class InutilizedNfe(models.Model):
     received_xml = fields.Binary(string="Xml Recebimento", readonly=True)
     received_xml_name = fields.Char(string="Nome Xml Recebimento", size=100, readonly=True)
 
-    @api.model
-    def create(self, vals):
-        vals["state"] = "draft"
-        return super(InutilizedNfe, self).create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            vals["state"] = "draft"
+        return super(InutilizedNfe, self).create(vals_list)
 
     def validate_hook(self):
         errors = []

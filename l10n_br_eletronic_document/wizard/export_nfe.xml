@@ -5,7 +5,7 @@
         <field name="arch" type="xml">
             <form string="Exportar NFe">
                 <field name="state" invisible="1" />
-                <group states="init">
+                <group invisible="state != 'init'">
                     <group name='dates'>
                         <field name="start_date"/>
                         <field name="end_date"/>
@@ -16,7 +16,7 @@
                         <field name="model"/>
                     </group>
                 </group>
-                <group states="done">
+                <group invisible="state != 'done'">
                     <field name="zip_file_name" invisible="1" />
                     <field name="zip_file" filename="zip_file_name" />
                 </group>
