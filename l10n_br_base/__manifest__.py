@@ -8,7 +8,7 @@
     'website': 'http://www.odoo-next.com,br',
     'contributors': [
         'Danimar Ribeiro <danimaribeiro@gmail.com>',
-        'Daniel Paloschi <danielpaloschi.dev@gmail.com',
+        'Daniel Paloschi <danielpaloschi.dev@gmail.com>',
     ],
     'depends': [
     ],

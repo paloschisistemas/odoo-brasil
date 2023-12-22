@@ -7,7 +7,7 @@
     'license': 'OEEL-1',
     'contributors': [
         'Danimar Ribeiro <danimaribeiro@gmail.com>',
-        'Daniel Paloschi <danielpaloschi.dev@gmail.com',
+        'Daniel Paloschi <danielpaloschi.dev@gmail.com>',
     ],
     'depends': [
         'account',

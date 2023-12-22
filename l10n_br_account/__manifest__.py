@@ -8,7 +8,7 @@
     'contributors': [
         'Danimar Ribeiro <danimaribeiro@gmail.com>',
         'Felipe Paloschi <paloschi.eca@gmail.com>',
-        'Daniel Paloschi <danielpaloschi.dev@gmail.com',
+        'Daniel Paloschi <danielpaloschi.dev@gmail.com>',
     ],
     'depends': [
         'account', 'account_payment',

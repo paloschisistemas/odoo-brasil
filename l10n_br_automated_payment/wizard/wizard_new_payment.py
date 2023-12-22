@@ -27,8 +27,8 @@ class WizardNewPaymentInvoice(models.TransientModel):
         return res
 
     payment_due = fields.Boolean(string="Pagamento Atrasado?")
-    description = fields.Char(string="Descrição", readonly=1)
-    partner_id = fields.Many2one('res.partner', readonly=1)
+    description = fields.Char(string="Descrição", readonly=True)
+    partner_id = fields.Many2one('res.partner', readonly=True)
     payment_journal_id = fields.Many2one(
         'account.journal', domain=[('type', '=', 'bank')],
         string="Forma de Pagamento", required=True)
