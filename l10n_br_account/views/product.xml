@@ -8,14 +8,14 @@
             <group name="accounting" position="inside">
                 <group>
                     <field name="l10n_br_fiscal_category_id" />
-                    <field name="l10n_br_origin" attrs="{'invisible': [('type', '=', 'service')]}" />
-                    <field name="l10n_br_ncm_id" attrs="{'invisible': [('type', '=', 'service')]}" />
-                    <field name="l10n_br_cest" attrs="{'invisible': [('type', '=', 'service')]}" />
-                    <field name="l10n_br_extipi" attrs="{'invisible': [('type', '=', 'service')]}" />
-                    <field name="l10n_br_fiscal_benefit" attrs="{'invisible': [('type', '=', 'service')]}" />
-                    <field name="service_type_id" attrs="{'invisible': [('type', '!=', 'service')]}" domain="[('internal_type', '=', 'normal')]"/>
-                    <field name="service_code" attrs="{'invisible': [('type', '!=', 'service')]}" />
-                    <field name="service_code_description" attrs="{'invisible': [('type', '!=', 'service')]}" />
+                    <field name="l10n_br_origin" invisible="type == 'service'" />
+                    <field name="l10n_br_ncm_id" invisible="type == 'service'" />
+                    <field name="l10n_br_cest" invisible="type == 'service'" />
+                    <field name="l10n_br_extipi" invisible="type == 'service'" />
+                    <field name="l10n_br_fiscal_benefit" invisible="type == 'service'" />
+                    <field name="service_type_id" invisible="type != 'service'" domain="[('internal_type', '=', 'normal')]"/>
+                    <field name="service_code" invisible="type != 'service'" />
+                    <field name="service_code_description" invisible="type != 'service'" />
                 </group>
             </group>
         </field>

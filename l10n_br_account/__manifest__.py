@@ -5,13 +5,13 @@
     'category': 'Localization',
     'author': 'Trustcode',
     'license': 'OEEL-1',
-    'website': 'http://www.odoo-next.com,br',
     'contributors': [
         'Danimar Ribeiro <danimaribeiro@gmail.com>',
         'Felipe Paloschi <paloschi.eca@gmail.com>',
+        'Daniel Paloschi <danielpaloschi.dev@gmail.com',
     ],
     'depends': [
-        'account',
+        'account', 'account_payment',
     ],
     'data': [
         'data/cron.xml',

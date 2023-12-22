@@ -1,9 +1,6 @@
 from odoo import api, fields, models
 
 
-STATES = {"draft": [("readonly", False)]}
-
-
 def compute_partition_amount(amount, line_amount, total_amount):
     if total_amount > 0:
         return round(amount * line_amount / total_amount, 2)
@@ -17,22 +14,16 @@ class AccountMove(models.Model):
         string="Frete",
         compute="_compute_l10n_br_delivery_amount",
         inverse="_inverse_l10n_br_delivery_amount",
-        readonly=True,
-        states=STATES,
     )
     l10n_br_expense_amount = fields.Monetary(
         string="Despesa",
         compute="_compute_l10n_br_expense_amount",
         inverse="_inverse_l10n_br_expense_amount",
-        readonly=True,
-        states=STATES,
     )
     l10n_br_insurance_amount = fields.Monetary(
         string="Seguro",
         compute="_compute_l10n_br_insurance_amount",
         inverse="_inverse_l10n_br_insurance_amount",
-        readonly=True,
-        states=STATES,
     )
 
     def _mapping_fiscal_position_account(self):
@@ -231,13 +222,13 @@ class AccountMoveLine(models.Model):
         )
 
     @api.depends(
-        "debit", "credit", "account_id.internal_type", "amount_residual"
+        "debit", "credit", "account_id.account_type", "amount_residual"
     )
     def _compute_payment_value(self):
         for item in self:
             item.l10n_br_payment_value = (
                 item.debit
-                if item.account_id.internal_type == "receivable"
+                if item.account_id.account_type == "receivable"
                 else item.credit * -1
             )
 
@@ -252,7 +243,7 @@ class AccountMoveLine(models.Model):
         dummy, act_id = self.env["ir.model.data"]._xmlid_to_res_model_res_id(
             "l10n_br_account.action_payment_account_move_line"
         )
-        receivable = self.account_id.internal_type == "receivable"
+        receivable = self.account_id.account_type == "receivable"
         vals = self.env["ir.actions.act_window"].browse(act_id).read()[0]
         vals["context"] = {
             "default_amount": self.debit or self.credit,
