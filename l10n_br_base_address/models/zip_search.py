@@ -11,34 +11,36 @@ except ImportError:
 
 
 class ZipSearchMixin(models.AbstractModel):
-    _name = 'zip.search.mixin'
-    _description = 'Pesquisa de CEP'
+    _name = "zip.search.mixin"
+    _description = "Pesquisa de CEP"
 
     def search_address_by_zip(self, zip_code):
-        zip_code = re.sub('[^0-9]', '', zip_code or '')
-        client = Client('https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente?wsdl') # noqa
+        zip_code = re.sub("[^0-9]", "", zip_code or "")
+        client = Client(
+            "https://apps.correios.com.br/SigepMasterJPA/AtendeClienteService/AtendeCliente?wsdl"
+        )  # noqa
         try:
             res = client.service.consultaCEP(zip_code)
-        except:
+        except Exception:
             return {}
-        state = self.env['res.country.state'].search(
-            [('country_id.code', '=', 'BR'),
-             ('code', '=', res['uf'])])
+        state = self.env["res.country.state"].search(
+            [("country_id.code", "=", "BR"), ("code", "=", res["uf"])]
+        )
 
-        city = self.env['res.city'].search([
-            ('name', '=ilike', res['cidade']),
-            ('state_id', '=', state.id)])
-        
-        if(res['end'] == None):
-            res['end'] = False
-        if(res['bairro'] == None):
-            res['bairro'] = False
-        
+        city = self.env["res.city"].search(
+            [("name", "=ilike", res["cidade"]), ("state_id", "=", state.id)]
+        )
+
+        if res["end"] is None:
+            res["end"] = False
+        if res["bairro"] is None:
+            res["bairro"] = False
+
         return {
-            'zip': zip_code,
-            'street': res['end'],
-            'l10n_br_district': res['bairro'],
-            'country_id': state.country_id.id,
-            'state_id': state.id,
-            'city_id': city.id
+            "zip": zip_code,
+            "street": res["end"],
+            "l10n_br_district": res["bairro"],
+            "country_id": state.country_id.id,
+            "state_id": state.id,
+            "city_id": city.id,
         }

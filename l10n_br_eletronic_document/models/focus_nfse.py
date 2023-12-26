@@ -1,9 +1,7 @@
 import re
 import json
-import base64
 import requests
 import logging
-import re
 from urllib.parse import urlparse
 
 
@@ -11,7 +9,6 @@ _logger = logging.getLogger(__name__)
 
 
 def _convert_values(vals):
-
     aliquota_iss = vals["itens_servico"][0]["aliquota"]
 
     vals["servico"] = {
@@ -21,17 +18,18 @@ def _convert_values(vals):
         ],
         "aliquota": abs(aliquota_iss),
         "iss_retido": False if aliquota_iss >= 0 else True,
-        "valor_iss": vals["valor_iss"] if vals['valor_iss'] >= 0 else 0,
-        "valor_iss_retido": abs(vals["valor_iss"]) if vals['valor_iss'] < 0 else 0,
+        "valor_iss": vals["valor_iss"] if vals["valor_iss"] >= 0 else 0,
+        "valor_iss_retido": abs(vals["valor_iss"]) if vals["valor_iss"] < 0 else 0,
         "valor_inss": vals["inss_valor_retencao"],
         "valor_servicos": vals["valor_servico"],
         "discriminacao": vals["discriminacao"],
     }
 
     # Tratar codigo_servico quando muncipio for campinas
-    if vals['emissor']['codigo_municipio'] == '3509502':
-        vals['servico']['item_lista_servico'] = re.sub(
-            '[^0-9]', '', vals["itens_servico"][0]["codigo_servico_municipio"])
+    if vals["emissor"]["codigo_municipio"] == "3509502":
+        vals["servico"]["item_lista_servico"] = re.sub(
+            "[^0-9]", "", vals["itens_servico"][0]["codigo_servico_municipio"]
+        )
 
     vals["natureza_operacao"] = "1"
     vals["prestador"] = vals["emissor"]
@@ -39,9 +37,9 @@ def _convert_values(vals):
         vals["tomador"]["cnpj"] = vals["tomador"]["cnpj_cpf"]
     elif len(vals["tomador"]["cnpj_cpf"]) == 11:
         vals["tomador"]["cpf"] = vals["tomador"]["cnpj_cpf"]
-    if vals['regime_tributario'] == 'simples':
-        vals['regime_especial_tributacao'] = 6
-        vals['optante_simples_nacional'] = True
+    if vals["regime_tributario"] == "simples":
+        vals["regime_especial_tributacao"] = 6
+        vals["optante_simples_nacional"] = True
     return vals
 
 
@@ -61,7 +59,8 @@ def send_api(token, ambiente, edocs):
         return {
             "code": 400,
             "api_code": 500,
-            "message": "Erro ao tentar envio de NFe - Favor contactar suporte\n%s" % response.text,
+            "message": "Erro ao tentar envio de NFe - Favor contactar suporte\n%s"
+            % response.text,
         }
 
     response = response.json()
@@ -98,7 +97,11 @@ def check_nfse_api(token, ambiente, nfe_reference):
         pdf = _download_file(response["url_danfse"])
 
         o = urlparse(response["url"])
-        xml_path = '%s://%s%s' % (o.scheme, o.hostname, response["caminho_xml_nota_fiscal"])
+        xml_path = "%s://%s%s" % (
+            o.scheme,
+            o.hostname,
+            response["caminho_xml_nota_fiscal"],
+        )
         xml = _download_file(xml_path)
         return {
             "code": 201,
