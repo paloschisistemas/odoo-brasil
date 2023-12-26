@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="br_coa_me_epp_chart_template" model="account.chart.template">
+    <record id="l10n_br_coa_me_epp_chart_template" model="account.chart.template">
         <field name="property_account_receivable_id" ref="account_account_1_1_2_01" />
         <field name="default_pos_receivable_account_id" ref="account_account_1_1_2_01" />
         <field name="property_account_payable_id" ref="account_account_2_1_1_01" />
@@ -15,7 +15,7 @@
 
     <!-- IPI ( 3 % )  SAIDA  -->
 
-    <record id="tax_template_out_ipi3" model="account.tax.template">
+    <!-- <record id="tax_template_out_ipi3" model="account.tax.template">
         <field name="description">IPI 3% (Recolher)</field>
         <field name="name">IPI 3% (Recolher)</field>
         <field name="amount">3</field>
@@ -1691,7 +1691,7 @@
                     'account_id': ref('account_account_1_1_4_03'),
                 }),
             ]"/>
-    </record>
+    </record> -->
 
 </odoo>
 

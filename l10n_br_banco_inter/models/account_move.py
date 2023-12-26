@@ -1,60 +1,66 @@
 import re
-import base64
-import requests
-import tempfile
 from datetime import timedelta
 from odoo import models
 from odoo.exceptions import ValidationError, UserError
 
 
 class AccountMove(models.Model):
-    _name = 'account.move'
-    _inherit = ['account.move', 'banco.inter.mixin']
+    _name = "account.move"
+    _inherit = ["account.move", "banco.inter.mixin"]
 
     def validate_data_boleto(self):
         errors = []
         for invoice in self:
-            if not invoice.payment_journal_id or not self.payment_journal_id.l10n_br_use_boleto_inter:
+            if (
+                not invoice.payment_journal_id
+                or not self.payment_journal_id.l10n_br_use_boleto_inter
+            ):
                 continue
 
             partner = invoice.partner_id.commercial_partner_id
             if partner.is_company and not partner.l10n_br_legal_name:
-                errors.append('Destinatário - Razão Social')
+                errors.append("Destinatário - Razão Social")
             if not partner.street:
-                errors.append('Destinatário / Endereço - Rua')
+                errors.append("Destinatário / Endereço - Rua")
             if not partner.l10n_br_number:
-                errors.append('Destinatário / Endereço - Número')
+                errors.append("Destinatário / Endereço - Número")
             if not partner.zip or len(re.sub(r"\D", "", partner.zip)) != 8:
-                errors.append('Destinatário / Endereço - CEP')
+                errors.append("Destinatário / Endereço - CEP")
             if not partner.state_id:
-                errors.append(u'Destinatário / Endereço - Estado')
+                errors.append("Destinatário / Endereço - Estado")
             if not partner.city_id:
-                errors.append(u'Destinatário / Endereço - Município')
+                errors.append("Destinatário / Endereço - Município")
             if not partner.country_id:
-                errors.append(u'Destinatário / Endereço - País')
+                errors.append("Destinatário / Endereço - País")
         if len(errors) > 0:
-            msg = "\n".join(
-                ["Por favor corrija os erros antes de prosseguir"] + errors)
+            msg = "\n".join(["Por favor corrija os erros antes de prosseguir"] + errors)
             raise ValidationError(msg)
 
     def send_information_to_banco_inter(self):
-        if not self.payment_journal_id or not self.payment_journal_id.l10n_br_use_boleto_inter:
+        if (
+            not self.payment_journal_id
+            or not self.payment_journal_id.l10n_br_use_boleto_inter
+        ):
             return
 
-        for moveline in self.receivable_move_line_ids.filtered(lambda x: not x.reconciled):
-            acquirer = self.env['payment.acquirer'].search(
-                [('provider', '=', 'boleto-inter')])
-            if not acquirer:
-                raise UserError(
-                    'Configure o modo de pagamento do Boleto Banco Inter')
-            transaction = self.env['payment.transaction'].create({
-                'acquirer_id': acquirer.id,
-                'amount': round(moveline.amount_residual, 2),
-                'currency_id': moveline.move_id.currency_id.id,
-                'partner_id': moveline.partner_id.id,
-                'date_maturity': moveline.date_maturity,
-                'invoice_ids': [(6, 0, self.ids)],
-            })
+        for moveline in self.receivable_move_line_ids.filtered(
+            lambda x: not x.reconciled
+        ):
+            provider = self.env["payment.provider"].search(
+                [("code", "=", "boleto-inter")]
+            )
+            if not provider:
+                raise UserError("Configure o modo de pagamento do Boleto Banco Inter")
+            transaction = self.env["payment.transaction"].create(
+                {
+                    "provider_id": provider.id,
+                    "amount": round(moveline.amount_residual, 2),
+                    "currency_id": moveline.move_id.currency_id.id,
+                    "partner_id": moveline.partner_id.id,
+                    "date_maturity": moveline.date_maturity,
+                    "invoice_ids": [(6, 0, self.ids)],
+                }
+            )
 
             tipo_mora = "ISENTO"
             if self.payment_journal_id.l10n_br_valor_juros_mora:
@@ -72,7 +78,9 @@ class AccountMove(models.Model):
                 "pagador": {
                     # Check the format for cpf
                     "cpfCnpj": re.sub("[^0-9]", "", partner_id.l10n_br_cnpj_cpf),
-                    "tipoPessoa": "FISICA" if partner_id.company_type == "person" else "JURIDICA",
+                    "tipoPessoa": "FISICA"
+                    if partner_id.company_type == "person"
+                    else "JURIDICA",
                     "nome": partner_id.l10n_br_legal_name or partner_id.name,
                     "endereco": partner_id.street,
                     "numero": partner_id.l10n_br_number,
@@ -101,9 +109,11 @@ class AccountMove(models.Model):
 
             nosso_numero = self.add_boleto_inter(self.payment_journal_id, vals)
 
-            transaction.write({
-                'acquirer_reference': nosso_numero,
-            })
+            transaction.write(
+                {
+                    "provider_reference": nosso_numero,
+                }
+            )
 
     def generate_payment_transactions(self):
         super(AccountMove, self).generate_payment_transactions()

@@ -23,7 +23,7 @@
         'l10n_br_eletronic_document',
     ],
     'data': [
-        'data/acquirer.xml',
+        'data/provider.xml',
         'wizard/sync_statement.xml',
         'views/payment_transaction.xml',
         'views/account_journal_views.xml',

@@ -4,17 +4,6 @@
 from odoo import api, fields, models
 
 
-class AccountTaxTemplate(models.Model):
-    _inherit = 'account.tax.template'
-
-    def _get_tax_vals(self, company, tax_template_to_tax):
-        res = super(AccountTaxTemplate, self)._get_tax_vals(
-            company, tax_template_to_tax)
-        res['domain'] = self.domain
-        res['amount_type'] = self.amount_type
-        return res
-
-
 class AccountTax(models.Model):
     _inherit = 'account.tax'
 

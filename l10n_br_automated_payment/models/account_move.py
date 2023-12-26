@@ -78,9 +78,9 @@ class AccountMove(models.Model):
         for moveline in self.receivable_move_line_ids:
             self.partner_id.action_synchronize_iugu()
 
-            iugu_p = self.env['payment.acquirer'].search([('provider', '=', 'iugu')])
+            iugu_p = self.env['payment.provider'].search([('code', '=', 'iugu')])
             transaction = self.env['payment.transaction'].create({
-                'acquirer_id': iugu_p.id,
+                'provider_id': iugu_p.id,
                 'amount': moveline.amount_residual,
                 'currency_id': moveline.move_id.currency_id.id,
                 'partner_id': moveline.partner_id.id,
@@ -120,7 +120,7 @@ class AccountMove(models.Model):
                 raise UserError(msg)
 
             transaction.write({
-                'acquirer_reference': data['id'],
+                'provider_reference': data['id'],
                 'transaction_url': data['secure_url'],
             })
             moveline.write({
