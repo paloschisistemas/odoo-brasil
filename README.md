@@ -21,15 +21,15 @@ Módulos migrados:
 
 | Nome| Status |
 |-------------|-----------|
-| l10n_br_account | :x: |
+| l10n_br_account | :white_check_mark: |
 | l10n_br_account_enterprise | :x: |
 | l10n_br_account_reports | :x: |
 | l10n_br_automated_payment | :x: |
 | l10n_br_banco_inter | :x: |
-| l10n_br_base | :x: |
-| l10n_br_base_address | :x: |
+| l10n_br_base | :white_check_mark: |
+| l10n_br_base_address | :white_check_mark: |
 | l10n_br_coa_me_epp | :x: |
-| l10n_br_eletronic_document | :x: |
+| l10n_br_eletronic_document | :white_check_mark: |
 | l10n_br_nfe_import | :x: |
 | l10n_br_nfe_mde | :x: |
 | l10n_br_point_of_sale | :x: |
