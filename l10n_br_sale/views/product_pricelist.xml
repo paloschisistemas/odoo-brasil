@@ -7,7 +7,7 @@
         <field name="inherit_id" ref="product.product_pricelist_item_form_view"/>
         <field name="arch" type="xml">
             <field name="categ_id" position="after">
-                <field name="fiscal_category_id" attrs="{'invisible': [('applied_on', '!=', '4_fiscal_category')], 'required': [('applied_on', '=', '4_fiscal_category')]}" />
+                <field name="fiscal_category_id" invisible="applied_on != '4_fiscal_category'" required="applied_on == '4_fiscal_category'" />
             </field>
         </field>
     </record>

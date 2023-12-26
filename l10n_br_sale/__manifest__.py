@@ -13,6 +13,7 @@
     ],
     "depends": [
         "sale",
+        "sale_stock",
         "delivery",
         "l10n_br_eletronic_document",
     ],

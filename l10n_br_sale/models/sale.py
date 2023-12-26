@@ -1,7 +1,5 @@
 from odoo import models, fields, api
 
-STATES = {"draft": [("readonly", False)]}
-
 
 def compute_partition_amount(amount, line_amount, total_amount):
     if total_amount > 0:
@@ -19,15 +17,11 @@ class SaleOrder(models.Model):
         string="Despesa",
         compute="_compute_l10n_br_expense_amount",
         inverse="_inverse_l10n_br_expense_amount",
-        readonly=True,
-        states=STATES,
     )
     l10n_br_insurance_amount = fields.Monetary(
         string="Seguro",
         compute="_compute_l10n_br_insurance_amount",
         inverse="_inverse_l10n_br_insurance_amount",
-        readonly=True,
-        states=STATES,
     )
 
     modalidade_frete = fields.Selection(
@@ -84,9 +78,7 @@ class SaleOrder(models.Model):
         elif line:
             line.unlink()
         elif self[amount_field_name] > 0:
-            product_external_id = "l10n_br_account.product_product_{}".format(
-                line_type
-            )
+            product_external_id = "l10n_br_account.product_product_{}".format(line_type)
             product = self.env.ref(product_external_id)
             self.write(
                 {
@@ -112,9 +104,7 @@ class SaleOrder(models.Model):
         ):
             line._compute_amount()
 
-    @api.depends(
-        "order_line", "order_line.price_unit", "order_line.product_uom_qty"
-    )
+    @api.depends("order_line", "order_line.price_unit", "order_line.product_uom_qty")
     def _compute_l10n_br_delivery_amount(self):
         for item in self:
             delivery_line = item.order_line.filtered(lambda x: x.is_delivery)
@@ -128,9 +118,7 @@ class SaleOrder(models.Model):
     )
     def _compute_l10n_br_expense_amount(self):
         for item in self:
-            expense_line = item.order_line.filtered(
-                lambda x: x.l10n_br_is_expense
-            )
+            expense_line = item.order_line.filtered(lambda x: x.l10n_br_is_expense)
             item.l10n_br_expense_amount = expense_line.price_total
             item.compute_lines_partition("expense")
 
@@ -145,9 +133,7 @@ class SaleOrder(models.Model):
     )
     def _compute_l10n_br_insurance_amount(self):
         for item in self:
-            insurance_line = item.order_line.filtered(
-                lambda x: x.l10n_br_is_insurance
-            )
+            insurance_line = item.order_line.filtered(lambda x: x.l10n_br_is_insurance)
             item.l10n_br_insurance_amount = insurance_line.price_total
             item.compute_lines_partition("insurance")
 
@@ -157,13 +143,15 @@ class SaleOrder(models.Model):
 
     def _prepare_invoice(self):
         vals = super(SaleOrder, self)._prepare_invoice()
-        picking_ids = self.env['stock.picking'].search([
-            ('origin', '=', self.name),
-            ('state', '=', 'done'),
-        ])
+        picking_ids = self.env["stock.picking"].search(
+            [
+                ("origin", "=", self.name),
+                ("state", "=", "done"),
+            ]
+        )
         quantidade_volumes = sum(len(picking.package_ids) for picking in picking_ids)
-        vals['quantidade_volumes'] = quantidade_volumes
-        vals['modalidade_frete'] = self.modalidade_frete
+        vals["quantidade_volumes"] = quantidade_volumes
+        vals["modalidade_frete"] = self.modalidade_frete
 
         if self.carrier_id and self.carrier_id.partner_id:
             vals["carrier_partner_id"] = self.carrier_id.partner_id
@@ -192,11 +180,7 @@ class SaleOrderLine(models.Model):
                 line.tax_id += fiscal_position_id.apply_tax_ids
 
     def is_delivery_expense_or_insurance(self):
-        return (
-            self.is_delivery
-            or self.l10n_br_is_expense
-            or self.l10n_br_is_insurance
-        )
+        return self.is_delivery or self.l10n_br_is_expense or self.l10n_br_is_insurance
 
     def _prepare_invoice_line(self, **optional_values):
         res = super(SaleOrderLine, self)._prepare_invoice_line(**optional_values)
