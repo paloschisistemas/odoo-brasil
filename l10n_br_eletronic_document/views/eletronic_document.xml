@@ -5,65 +5,65 @@
             <field name="arch" type="xml">
                 <form string="Documento Eletrônico">
                     <header>
-                        <button name="action_send_eletronic_invoice" states="draft" string="Enviar Agora" type="object" class="oe_highlight"/>
-                        <button name="action_back_to_draft" states="edit,error" string="Repetir" type="object"/>
-                        <button name="action_edit_edoc" states="draft,error" string="Habilitar Edição" type="object" />
-                        <button name="action_generate_xml" states="draft,error" string="Gerar XML" type="object" groups="base.group_no_one"/>
-                        <button name="action_cancel_document" confirm="Confirma o cancelamento do documento?" states="done" string="Cancelar" type="object"/>
-                        <button name="send_email_nfe" string="Reenviar Email" type="object" attrs="{'invisible': [('state', '!=', 'done')]}" />
-                        <button name="action_check_status_nfse" string="Consultar Situação" type="object" states="processing" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                        <button name="action_send_eletronic_invoice" invisible="state != 'draft'" string="Enviar Agora" type="object" class="oe_highlight"/>
+                        <button name="action_back_to_draft" invisible="state not in ['edit', 'error']" string="Repetir" type="object"/>
+                        <button name="action_edit_edoc" invisible="state not in ['draft', 'error']" string="Habilitar Edição" type="object" />
+                        <button name="action_generate_xml" invisible="state not in ['draft', 'error']" string="Gerar XML" type="object" groups="base.group_no_one"/>
+                        <button name="action_cancel_document" confirm="Confirma o cancelamento do documento?" invisible="state != 'done'" string="Cancelar" type="object"/>
+                        <button name="send_email_nfe" string="Reenviar Email" type="object" invisible="state != 'done'" />
+                        <button name="action_check_status_nfse" string="Consultar Situação" type="object" invisible="state != 'processing'" />
                         <button name="generate_correction_letter" type="object" class="oe_highlight" icon="fa-envelope"
-                            string="Carta de Correção" attrs="{'invisible': ['|', ('state', '!=', 'done'), ('model', 'not in', ('nfe', 'nfce'))]}">
+                            string="Carta de Correção" invisible="state != 'done' or model not in ['nfe', 'nfce']">
                         </button>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,done" />
                     </header>
                     <field name="ambiente" invisible="1" />
                     <div class="alert alert-danger" role="alert" style="margin-bottom:0px;"
-                        attrs="{'invisible': [('ambiente', '==', 'producao')]}">
+                        invisible="ambiente == 'producao'">
                         A NFe está em ambiente de homologação
                     </div>
                     <field name="cert_state" invisible="1" />
                     <div class="alert alert-danger" role="alert" style="margin-bottom:0px;"
-                        attrs="{'invisible': [('cert_state', '!=', 'expired')]}">
+                        invisible="cert_state != 'expired'">
                         O certificado digital da empresa está vencida!
                     </div>
                     <div name="alertas" class="alert alert-info" role="alert" style="margin-bottom:0px;">
                         <div class="row">
                             <div class="col-md-6 col-md-offset-1">
-                                <b>Situação: </b><field name="codigo_retorno" class="oe_inline" readonly="1"/><br />
-                                <b>Mensagem: </b><field name="mensagem_retorno"  class="oe_inline" readonly="1" />
+                                <b>Situação: </b><field name="codigo_retorno" class="oe_inline" readonly="state != 'draft'" /><br />
+                                <b>Mensagem: </b><field name="mensagem_retorno"  class="oe_inline" readonly="state != 'draft'" />
                             </div>
                         </div>
                     </div>
                     <sheet string="Documento Eletronico">
                         <group>
                             <group>
-                                <field name="model"/>
-                                <field name="move_id"/>
+                                <field name="model" readonly="state != 'draft'"/>
+                                <field name="move_id" readonly="state != 'draft'"/>
                                 <field name="partner_id"/>
-                                <field name="partner_shipping_id"/>
+                                <field name="partner_shipping_id" readonly="state != 'draft'" />
                             </group>
                             <group>
-                                <field name="tipo_operacao" />
-                                <field name="fiscal_position_id"/>
-                                <field name="natureza_operacao"/>
+                                <field name="tipo_operacao" readonly="state != 'draft'"/>
+                                <field name="fiscal_position_id" readonly="state != 'draft'" />
+                                <field name="natureza_operacao" readonly="state != 'draft'" />
                             </group>
                         </group>
                         <notebook>
                             <page name="identificacao" string="Identificação">
                                 <group>
                                     <group>
-                                        <field name="name"/>
+                                        <field name="name" readonly="state != 'draft'"/>
                                         <field name="company_id"/>
-                                        <field name="currency_id" invisible="1"/>
+                                        <field name="currency_id" invisible="1" readonly="state != 'draft'"/>
                                         <!-- <field name="serie"/> -->
                                         <field name="serie_documento"/>
-                                        <field name="numero"/>
-                                        <field name="numero_rps"/>
-                                        <field name="numero_controle"/>
-                                        <field name="recibo_nfe"  attrs="{'invisible': [('model', 'not in', ('nfe', 'nfce'))]}" />
-                                        <field name="qrcode_hash" attrs="{'invisible': [('model', 'not in', ('nfce'))]}" />
-                                        <field name="qrcode_url" attrs="{'invisible': [('model', 'not in', ('nfce'))]}" />
+                                        <field name="numero" readonly="state != 'draft'" />
+                                        <field name="numero_rps" readonly="state != 'draft'" />
+                                        <field name="numero_controle" readonly="state != 'draft'" />
+                                        <field name="recibo_nfe"  invisible="model not in ['nfe', 'nfce']" readonly="state != 'draft'" />
+                                        <field name="qrcode_hash" invisible="model not in ['nfce']" />
+                                        <field name="qrcode_url" invisible="model not in ['nfce']" />
                                         <field name="nfe_processada_name" invisible="1"/>
                                         <field name="nfe_processada" filename="nfe_processada_name"/>
                                         <field name="nfse_url" widget="url"/>
@@ -71,18 +71,18 @@
                                         <field name="nfse_pdf" filename="nfse_pdf_name"/>
                                     </group>
                                     <group>
-                                        <field name="data_emissao"/>
-                                        <field name="data_autorizacao"/>
+                                        <field name="data_emissao" readonly="state != 'draft'"/>
+                                        <field name="data_autorizacao" readonly="state != 'draft'"/>
                                         <field name="data_entrada_saida" />
-                                        <field name="ambiente"/>
+                                        <field name="ambiente" readonly="state != 'draft'" />
                                         <field name="cod_regime_tributario" />
-                                        <field name="finalidade_emissao"/>
-                                        <field name="ind_final" attrs="{'invisible': [('model', 'not in', ('nfe', 'nfce'))]}" />
-                                        <field name="ind_pres" attrs="{'invisible': [('model', 'not in', ('nfe', 'nfce'))]}" />
-                                        <field name="ind_intermediario" attrs="{'invisible': [('model', 'not in', ('nfe', 'nfce'))]}" />
-                                        <field name="ind_dest" attrs="{'invisible': [('model', 'not in', ('nfe', 'nfce'))]}" />
-                                        <field name="ind_ie_dest" attrs="{'invisible': [('model', 'not in', ('nfe', 'nfce'))]}" />
-                                        <field name="iest" attrs="{'invisible': [('model', 'not in', ('nfe', 'nfce'))]}" />
+                                        <field name="finalidade_emissao" readonly="state != 'draft'" />
+                                        <field name="ind_final" invisible="model not in ['nfe', 'nfce']" readonly="state != 'draft'" />
+                                        <field name="ind_pres" invisible="model not in ['nfe', 'nfce']" readonly="state != 'draft'" />
+                                        <field name="ind_intermediario" invisible="model not in ['nfe', 'nfce']" readonly="state != 'draft'" />
+                                        <field name="ind_dest" invisible="model not in ['nfe', 'nfce']" readonly="state != 'draft'" />
+                                        <field name="ind_ie_dest" invisible="model not in ['nfe', 'nfce']" readonly="state != 'draft'" />
+                                        <field name="iest" invisible="model not in ['nfe', 'nfce']" readonly="state != 'draft'" />
                                     </group>
                                 </group>
                             </page>
@@ -104,99 +104,99 @@
                             <page name="totais" string="Totais">
                                 <group>
                                     <group name="totais" string="Totais">
-                                        <field name="valor_bruto" />
-                                        <field name="valor_produtos" />
-                                        <field name="valor_frete" />
-                                        <field name="valor_seguro" />
-                                        <field name="valor_desconto" />
-                                        <field name="valor_despesas" />
-                                        <field name="valor_final" />
+                                        <field name="valor_bruto" readonly="state != 'draft'" />
+                                        <field name="valor_produtos" readonly="state != 'draft'" />
+                                        <field name="valor_frete" readonly="state != 'draft'" />
+                                        <field name="valor_seguro" readonly="state != 'draft'" />
+                                        <field name="valor_desconto" readonly="state != 'draft'" />
+                                        <field name="valor_despesas" readonly="state != 'draft'" />
+                                        <field name="valor_final" readonly="state != 'draft'" />
                                     </group>
                                     <group name="impostos" string="Impostos">
-                                        <field name="valor_bc_icms" />
-                                        <field name="valor_icms" />
-                                        <field name="valor_icms_deson" />
-                                        <field name="valor_bc_icmsst" />
-                                        <field name="valor_icmsst" />
-                                        <field name="valor_fcpst" />
-                                        <field name="valor_ii" />
-                                        <field name="valor_ipi" />
-                                        <field name="pis_valor" />
-                                        <field name="cofins_valor" />
-                                        <field name="csll_valor" />
-                                        <field name="irpj_valor" />
-                                        <field name="valor_icms_fcp_uf_dest" attrs="{'invisible': [('model', 'not in', ('nfe', 'nfce'))]}" />
-                                        <field name="valor_icms_uf_dest" attrs="{'invisible': [('model', 'not in', ('nfe', 'nfce'))]}" />
-                                        <field name="valor_icms_uf_remet" attrs="{'invisible': [('model', 'not in', ('nfe', 'nfce'))]}" />
-                                        <field name="valor_estimado_tributos" />
+                                        <field name="valor_bc_icms" readonly="state != 'draft'" />
+                                        <field name="valor_icms" readonly="state != 'draft'" />
+                                        <field name="valor_icms_deson" readonly="state != 'draft'" />
+                                        <field name="valor_bc_icmsst" readonly="state != 'draft'" />
+                                        <field name="valor_icmsst" readonly="state != 'draft'" />
+                                        <field name="valor_fcpst" readonly="state != 'draft'" />
+                                        <field name="valor_ii" readonly="state != 'draft'" />
+                                        <field name="valor_ipi" readonly="state != 'draft'" />
+                                        <field name="pis_valor" readonly="state != 'draft'"/>
+                                        <field name="cofins_valor" readonly="state != 'draft'"/>
+                                        <field name="csll_valor" readonly="state != 'draft'" />
+                                        <field name="irpj_valor" readonly="state != 'draft'"/>
+                                        <field name="valor_icms_fcp_uf_dest" invisible="model not in ['nfe', 'nfce']" readonly="state != 'draft'" />
+                                        <field name="valor_icms_uf_dest" invisible="model not in ['nfe', 'nfce']" readonly="state != 'draft'" />
+                                        <field name="valor_icms_uf_remet" invisible="model not in ['nfe', 'nfce']" readonly="state != 'draft'" />
+                                        <field name="valor_estimado_tributos" readonly="state != 'draft'" />
                                     </group>
                                 </group>
                                 <group>
                                     <group name="servico" string="Totais de Serviço">
-                                        <field name="valor_servicos" />
-                                        <field name="iss_base_calculo" />
-                                        <field name="iss_valor" />
+                                        <field name="valor_servicos" readonly="state != 'draft'" />
+                                        <field name="iss_base_calculo" readonly="state != 'draft'" />
+                                        <field name="iss_valor" readonly="state != 'draft'"/>
                                     </group>
                                     <group name="retencoes" string="Retenções">
-                                        <field name="iss_valor_retencao" />
-                                        <field name="pis_valor_retencao" />
-                                        <field name="cofins_valor_retencao" />
-                                        <field name="irrf_base_calculo" />
-                                        <field name="irrf_valor_retencao" />
-                                        <field name="csll_base_calculo" />
-                                        <field name="csll_valor_retencao" />
-                                        <field name="inss_base_calculo" />
-                                        <field name="inss_valor_retencao" />
+                                        <field name="iss_valor_retencao" readonly="state != 'draft'" />
+                                        <field name="pis_valor_retencao" readonly="state != 'draft'" />
+                                        <field name="cofins_valor_retencao" readonly="state != 'draft'" />
+                                        <field name="irrf_base_calculo" readonly="state != 'draft'" />
+                                        <field name="irrf_valor_retencao" readonly="state != 'draft'" />
+                                        <field name="csll_base_calculo" readonly="state != 'draft'" />
+                                        <field name="csll_valor_retencao" readonly="state != 'draft'" />
+                                        <field name="inss_base_calculo" readonly="state != 'draft'" />
+                                        <field name="inss_valor_retencao" readonly="state != 'draft'" />
                                     </group>
                                 </group>
                             </page>
-                            <page name="transporte" string="Transportes" attrs="{'invisible': [('model', 'not in', ('nfe', 'nfce'))]}">
+                            <page name="transporte" string="Transportes" invisible="model not in ['nfe', 'nfce']">
                                 <group>
                                     <group>
-                                        <field name="modalidade_frete" />
-                                        <field name="transportadora_id" />
-                                        <field name="placa_veiculo" />
+                                        <field name="modalidade_frete" readonly="state != 'draft'" />
+                                        <field name="transportadora_id" readonly="state != 'draft'" />
+                                        <field name="placa_veiculo" readonly="state != 'draft'" />
                                     </group>
                                     <group>
-                                        <field name="uf_veiculo" />
-                                        <field name="rntc" />
+                                        <field name="uf_veiculo" readonly="state != 'draft'" />
+                                        <field name="rntc" readonly="state != 'draft'" />
                                     </group>
                                 </group>
                                 <group string="Reboques">
-                                    <field name="reboque_ids" nolabel="1" context="{'default_eletronic_document_id': id}" />
+                                    <field name="reboque_ids" nolabel="1" context="{'default_eletronic_document_id': id}" readonly="state != 'draft'" />
                                 </group>
                                 <group string="Volumes">
-                                    <field name="volume_ids" nolabel="1" context="{'default_eletronic_document_id': id}" />
+                                    <field name="volume_ids" nolabel="1" context="{'default_eletronic_document_id': id}" readonly="state != 'draft'" />
                                 </group>
                             </page>
                             <page name="cobranca" string="Cobrança">
                                 <group>
-                                    <field name="payment_term_id"/>
-                                    <field name="numero_fatura" />
-                                    <field name="fatura_bruto" />
-                                    <field name="fatura_desconto" />
-                                    <field name="fatura_liquido" />
+                                    <field name="payment_term_id" readonly="state != 'draft'"/>
+                                    <field name="numero_fatura" readonly="state != 'draft'" />
+                                    <field name="fatura_bruto" readonly="state != 'draft'" />
+                                    <field name="fatura_desconto" readonly="state != 'draft'" />
+                                    <field name="fatura_liquido" readonly="state != 'draft'" />
                                 </group>
                                 <group string="Duplicatas">
-                                    <field name="duplicata_ids" nolabel="1" context="{'default_eletronic_document_id': id}" />
+                                    <field name="duplicata_ids" nolabel="1" context="{'default_eletronic_document_id': id}" readonly="state != 'draft'" />
                                 </group>
                             </page>
-                            <page name="exportacao" string="Exportação/Compras" attrs="{'invisible': [('model', 'not in', ('nfe', 'nfce'))]}">
+                            <page name="exportacao" string="Exportação/Compras" invisible="model not in ['nfe', 'nfce']">
                                 <group>
                                     <group string="Exportação">
-                                        <field name="uf_saida_pais_id" options="{'no_create': True, 'no_create_edit': True}" />
-                                        <field name="local_embarque" />
-                                        <field name="local_despacho" />
+                                        <field name="uf_saida_pais_id" options="{'no_create': True, 'no_create_edit': True}" readonly="state != 'draft'" />
+                                        <field name="local_embarque" readonly="state != 'draft'" />
+                                        <field name="local_despacho" readonly="state != 'draft'" />
                                     </group>
                                     <group string="Compras">
-                                        <field name="nota_empenho" />
-                                        <field name="pedido_compra" />
-                                        <field name="contrato_compra" />
+                                        <field name="nota_empenho" readonly="state != 'draft'" />
+                                        <field name="pedido_compra" readonly="state != 'draft'" />
+                                        <field name="contrato_compra" readonly="state != 'draft'" />
                                     </group>
                                 </group>
                             </page>
-                            <page name="documentos_relacionados" string="Doc. Relacionados" attrs="{'invisible': [('model', 'not in', ('nfe', 'nfce'))]}">
-                                <field name="related_document_ids" >
+                            <page name="documentos_relacionados" string="Doc. Relacionados" invisible="model not in ['nfe', 'nfce']">
+                                <field name="related_document_ids" readonly="state != 'draft'" >
                                     <tree>
                                         <field name="eletronic_document_id" />
                                         <field name="document_type" />
@@ -206,8 +206,8 @@
                                     </tree>
                                 </field>
                             </page> 
-                            <page name="carta_correcao" string="Cartas de Correção" attrs="{'invisible': [('model', 'not in', ('nfe', 'nfce'))]}">
-                                <field name="cartas_correcao_ids" >
+                            <page name="carta_correcao" string="Cartas de Correção" invisible="model not in ['nfe', 'nfce']">
+                                <field name="cartas_correcao_ids" readonly="state != 'draft'" >
                                     <tree>
                                         <field name="sequencial_evento" />
                                         <field name="message" />
@@ -219,8 +219,8 @@
 
                             <page string="Observações">
                                 <group>
-                                    <field name="informacoes_legais" />
-                                    <field name="informacoes_complementares" />
+                                    <field name="informacoes_legais" readonly="state != 'draft'" />
+                                    <field name="informacoes_complementares" readonly="state != 'draft'" />
                                 </group>
                             </page>
                             <page name="tecnico" string="Informações técnicas">
@@ -228,8 +228,8 @@
                                     <group>
                                         <field name="data_agendada"/>
                                         <field name="schedule_user_id" />
-                                        <field name="email_sent" />
-                                        <field name="salvar_xml_enviado" />
+                                        <field name="email_sent" readonly="state != 'draft'" />
+                                        <field name="salvar_xml_enviado" readonly="state != 'draft'" />
                                         <field name="xml_to_send_name" invisible="1"/>
                                         <field name="xml_to_send" filename="xml_to_send_name" groups="base.group_no_one"/>
                                     </group>
@@ -267,7 +267,7 @@
                     <field name="valor_final" sum="Total"/>
                     <field name="data_agendada" />
                     <field name="schedule_user_id" />
-                    <field name="state" />
+                    <field name="state"/>
                 </tree>
             </field>
         </record>

@@ -10,27 +10,27 @@
                           <group>
                               <field name="eletronic_document_id" invisible="1" />
                               <field name="state" invisible="1"/>
-                              <field name="product_id" />
-                              <field name="uom_id" />
-                              <field name="unidade_medida" />
-                              <field name="quantidade" />
-                              <field name="preco_unitario" />
-                              <field name="valor_bruto" />
-                              <field name="desconto" />
-                              <field name="seguro" />
-                              <field name="frete" />
+                              <field name="product_id" readonly="state != 'draft'" />
+                              <field name="uom_id" readonly="state != 'draft'" />
+                              <field name="unidade_medida" readonly="state != 'draft'" />
+                              <field name="quantidade" readonly="state != 'draft'" />
+                              <field name="preco_unitario" readonly="state != 'draft'" />
+                              <field name="valor_bruto" readonly="state != 'draft'" />
+                              <field name="desconto" readonly="state != 'draft'" />
+                              <field name="seguro" readonly="state != 'draft'" />
+                              <field name="frete" readonly="state != 'draft'" />
                               <field name="outras_despesas" />
-                              <field name="valor_liquido" />
+                              <field name="valor_liquido" readonly="state != 'draft'" />
                           </group>
                           <group>
-                              <field name="tipo_produto" />
-                              <field name="cfop" />
-                              <field name="ncm" />
-                              <field name="cest" />
-                              <field name="codigo_beneficio" />
-                              <field name="extipi" />
-                              <field name="tributos_estimados" />
-                              <field name="indicador_total" />
+                              <field name="tipo_produto" readonly="state != 'draft'" />
+                              <field name="cfop" readonly="state != 'draft'" />
+                              <field name="ncm" readonly="state != 'draft'" />
+                              <field name="cest" readonly="state != 'draft'" />
+                              <field name="codigo_beneficio" readonly="state != 'draft'" />
+                              <field name="extipi" readonly="state != 'draft'" />
+                              <field name="tributos_estimados" readonly="state != 'draft'" />
+                              <field name="indicador_total" readonly="state != 'draft'" />
                               <field name="pedido_compra" />
                               <field name="item_pedido_compra" />
                           </group>
@@ -39,122 +39,122 @@
                       <field name="name"/>
                   </page>
 
-                  <page name="icms" string="ICMS" attrs="{'invisible': [('tipo_produto', '=', 'service')]}">
+                  <page name="icms" string="ICMS" invisible="tipo_produto == 'service'">
                       <group name="detalhes_icms" string="Detalhes do ICMS">
                           <group>
-                              <field name="icms_cst" />
-                              <field name="origem"/>
-                              <field name="icms_tipo_base"/>
-                              <field name="icms_valor_original_operacao" />
-                              <field name="icms_aliquota_diferimento" />
-                              <field name="icms_valor_diferido" />
-                              <field name="icms_motivo_desoneracao" />
-                              <field name="icms_valor_desonerado" />
+                              <field name="icms_cst"  readonly="state != 'draft'" />
+                              <field name="origem" readonly="state != 'draft'" />
+                              <field name="icms_tipo_base" readonly="state != 'draft'" />
+                              <field name="icms_valor_original_operacao" readonly="state != 'draft'" />
+                              <field name="icms_aliquota_diferimento" readonly="state != 'draft'" />
+                              <field name="icms_valor_diferido" readonly="state != 'draft'" />
+                              <field name="icms_motivo_desoneracao" readonly="state != 'draft'" />
+                              <field name="icms_valor_desonerado" readonly="state != 'draft'" />
                           </group>
                           <group>
-                              <field name="icms_base_calculo"/>
-                              <field name="icms_aliquota_reducao_base"/>
-                              <field name="icms_aliquota" />
-                              <field name="icms_valor"/>
-                              <field name="icms_aliquota_credito" />
-                              <field name="icms_valor_credito" />
+                              <field name="icms_base_calculo" readonly="state != 'draft'" />
+                              <field name="icms_aliquota_reducao_base" readonly="state != 'draft'" />
+                              <field name="icms_aliquota"  readonly="state != 'draft'" />
+                              <field name="icms_valor" readonly="state != 'draft'" />
+                              <field name="icms_aliquota_credito" readonly="state != 'draft'" />
+                              <field name="icms_valor_credito" readonly="state != 'draft'" />
                           </group>
                       </group>
                       <group name="substituicao_icms" string="Substituição Tributária ICMS">
                           <group name="icms_substituicao">
-                              <field name="icms_st_tipo_base"/>
-                              <field name="icms_st_aliquota_mva"/>
-                              <field name="icms_st_base_calculo"/>
-                              <field name="icms_st_aliquota_reducao_base"/>
-                              <field name="icms_st_aliquota" />
-                              <field name="icms_st_valor"/>
-                              <field name="fcp_st_aliquota" />
-                              <field name="fcp_st_valor"/>
+                              <field name="icms_st_tipo_base" readonly="state != 'draft'" />
+                              <field name="icms_st_aliquota_mva" readonly="state != 'draft'" />
+                              <field name="icms_st_base_calculo" readonly="state != 'draft'" />
+                              <field name="icms_st_aliquota_reducao_base" readonly="state != 'draft'" />
+                              <field name="icms_st_aliquota" readonly="state != 'draft'" />
+                              <field name="icms_st_valor" readonly="state != 'draft'" />
+                              <field name="fcp_st_aliquota" readonly="state != 'draft'" />
+                              <field name="fcp_st_valor" readonly="state != 'draft'" />
                           </group>
                           <group name="icms_interestaual">
-                                <field name="tem_difal" />
-                                <field name="icms_bc_uf_dest" />
-                                <field name="icms_aliquota_fcp_uf_dest" />
-                                <field name="icms_aliquota_uf_dest" />
-                                <field name="icms_aliquota_interestadual" />
-                                <field name="icms_aliquota_inter_part" />
-                                <field name="icms_fcp_uf_dest" />
-                                <field name="icms_uf_dest" />
-                                <field name="icms_uf_remet" />
+                                <field name="tem_difal" readonly="state != 'draft'" />
+                                <field name="icms_bc_uf_dest" readonly="state != 'draft'" />
+                                <field name="icms_aliquota_fcp_uf_dest" readonly="state != 'draft'" />
+                                <field name="icms_aliquota_uf_dest" readonly="state != 'draft'" />
+                                <field name="icms_aliquota_interestadual" readonly="state != 'draft'" />
+                                <field name="icms_aliquota_inter_part" readonly="state != 'draft'" />
+                                <field name="icms_fcp_uf_dest" readonly="state != 'draft'" />
+                                <field name="icms_uf_dest" readonly="state != 'draft'" />
+                                <field name="icms_uf_remet" readonly="state != 'draft'" />
                         </group>
                       </group>
                   </page>
-                  <page name="iss" string="ISS" attrs="{'invisible': [('tipo_produto','!=', 'service')]}">
+                  <page name="iss" string="ISS" invisible="tipo_produto != 'service'">
                     <group>
                       <group>
-                          <field name="iss_base_calculo"/>
-                          <field name="iss_aliquota"/>
-                          <field name="iss_valor"/>
-                          <field name="iss_valor_retencao"/>
+                          <field name="iss_base_calculo" readonly="state != 'draft'"/>
+                          <field name="iss_aliquota" readonly="state != 'draft'"/>
+                          <field name="iss_valor" readonly="state != 'draft'"/>
+                          <field name="iss_valor_retencao" readonly="state != 'draft'"/>
                       </group>
                       <group>
-                          <field name="item_lista_servico" />
-                          <field name="codigo_servico_municipio" /> 
-                          <field name="descricao_codigo_municipio" />
-                          <field name="codigo_cnae" />
-                          <field name="codigo_servico_paulistana_nome" />
+                          <field name="item_lista_servico" readonly="state != 'draft'" />
+                          <field name="codigo_servico_municipio" readonly="state != 'draft'" /> 
+                          <field name="descricao_codigo_municipio" readonly="state != 'draft'" />
+                          <field name="codigo_cnae" readonly="state != 'draft'" />
+                          <field name="codigo_servico_paulistana_nome" readonly="state != 'draft'" />
                       </group>
                     </group>
                   </page>
-                  <page name="retencoes" string="Retenções" attrs="{'invisible': [('tipo_produto','!=', 'service')]}">
+                  <page name="retencoes" string="Retenções" invisible="tipo_produto != 'service'">
                       <group>
                           <group string="CSLL">
-                              <field name="csll_base_calculo"/>
-                              <field name="csll_aliquota"/>
-                              <field name="csll_valor"/>
-                              <field name="csll_valor_retencao"/>
+                              <field name="csll_base_calculo" readonly="state != 'draft'" />
+                              <field name="csll_aliquota" readonly="state != 'draft'" />
+                              <field name="csll_valor" readonly="state != 'draft'" />
+                              <field name="csll_valor_retencao" readonly="state != 'draft'" />
                           </group>
                           <group string="IRPJ">
-                              <field name="irpj_base_calculo"/>
-                              <field name="irpj_aliquota"/>
-                              <field name="irpj_valor"/>
-                              <field name="irpj_valor_retencao"/>
+                              <field name="irpj_base_calculo" readonly="state != 'draft'" />
+                              <field name="irpj_aliquota" readonly="state != 'draft'" />
+                              <field name="irpj_valor" readonly="state != 'draft'" />
+                              <field name="irpj_valor_retencao" readonly="state != 'draft'" />
                           </group>
                       </group>
                       <group>
                           <group string="IRRF">
-                              <field name="irrf_base_calculo"/>
-                              <field name="irrf_aliquota"/>
-                              <field name="irrf_valor"/>
-                              <field name="irrf_valor_retencao"/>
+                              <field name="irrf_base_calculo" readonly="state != 'draft'" />
+                              <field name="irrf_aliquota" readonly="state != 'draft'" />
+                              <field name="irrf_valor" readonly="state != 'draft'" />
+                              <field name="irrf_valor_retencao" readonly="state != 'draft'" />
                           </group>
                           <group string="INSS">
-                              <field name="inss_base_calculo"/>
-                              <field name="inss_aliquota"/>
-                              <field name="inss_valor"/>
-                              <field name="inss_valor_retencao"/>
+                              <field name="inss_base_calculo" readonly="state != 'draft'" />
+                              <field name="inss_aliquota" readonly="state != 'draft'" />
+                              <field name="inss_valor" readonly="state != 'draft'" />
+                              <field name="inss_valor_retencao" readonly="state != 'draft'" />
                           </group>
                       </group>
                   </page>
-                  <page name="ipi" string="IPI" attrs="{'invisible': [('tipo_produto','==', 'service')]}">
+                  <page name="ipi" string="IPI" invisible="tipo_produto == 'service'">
                       <group string="Detalhes do IPI">
                           <group>
-                              <field name="ipi_cst" />
+                              <field name="ipi_cst" readonly="state != 'draft'" />
                           </group>
                           <group>
-                              <field name="ipi_valor" />
-                              <field name="ipi_base_calculo"/>
-                              <field name="ipi_reducao_bc" />
-                              <field name="ipi_aliquota" />
-                              <field name="ipi_valor"/>
+                              <field name="ipi_valor" readonly="state != 'draft'" />
+                              <field name="ipi_base_calculo" readonly="state != 'draft'" />
+                              <field name="ipi_reducao_bc" readonly="state != 'draft'" />
+                              <field name="ipi_aliquota" readonly="state != 'draft'" />
+                              <field name="ipi_valor" readonly="state != 'draft'" />
                           </group>
                       </group>
                   </page>
                   <page name="pis" string="PIS">
                       <group string="Detalhes do PIS">
                           <group>
-                              <field name="pis_cst" />
+                              <field name="pis_cst" readonly="state != 'draft'"/>
                           </group>
                           <group>
-                              <field name="pis_base_calculo"/>
-                              <field name="pis_aliquota"/>
-                              <field name="pis_valor"/>
-                              <field name="pis_valor_retencao" attrs="{'invisible': [('tipo_produto','!=', 'service')]}"/>
+                              <field name="pis_base_calculo" readonly="state != 'draft'"/>
+                              <field name="pis_aliquota" readonly="state != 'draft'"/>
+                              <field name="pis_valor" readonly="state != 'draft'"/>
+                              <field name="pis_valor_retencao" invisible="tipo_produto != 'service'" readonly="state != 'draft'"/>
                           </group>
                       </group>
 
@@ -162,23 +162,23 @@
                   <page name="cofins" string="COFINS">
                       <group string="Detalhes do COFINS">
                           <group>
-                              <field name="cofins_cst"/>
+                              <field name="cofins_cst" readonly="state != 'draft'" />
                           </group>
                           <group>
-                              <field name="cofins_base_calculo"/>
-                              <field name="cofins_aliquota"/>
-                              <field name="cofins_valor"/>
-                              <field name="cofins_valor_retencao" attrs="{'invisible': [('tipo_produto','!=', 'service')]}"/>
+                              <field name="cofins_base_calculo" readonly="state != 'draft'" />
+                              <field name="cofins_aliquota" readonly="state != 'draft'" />
+                              <field name="cofins_valor" readonly="state != 'draft'" />
+                              <field name="cofins_valor_retencao" invisible="tipo_produto != 'service'" readonly="state != 'draft'" />
                           </group>
                       </group>
                   </page>
-                  <page name="ii" string="II" attrs="{'invisible': [('tipo_produto','==', 'service')]}">
+                  <page name="ii" string="II" invisible="tipo_produto == 'service'">
                       <group string="Detalhes do Imposto de Importação">
-                          <field name="ii_base_calculo"/>
-                          <field name="ii_aliquota"/>
-                          <field name="ii_valor_despesas"/>
-                          <field name="ii_valor_iof"/>
-                          <field name="ii_valor"/>
+                          <field name="ii_base_calculo" readonly="state != 'draft'" />
+                          <field name="ii_aliquota" readonly="state != 'draft'" />
+                          <field name="ii_valor_despesas" readonly="state != 'draft'" />
+                          <field name="ii_valor_iof" readonly="state != 'draft'" />
+                          <field name="ii_valor" readonly="state != 'draft'" />
                       </group>
                       <group string="Declaração de Importação">
                           <field name="import_declaration_ids" colspan="4" nolabel="1" />

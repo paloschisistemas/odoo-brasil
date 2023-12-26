@@ -4,12 +4,13 @@
 {  # pylint: disable=C8101,C8103
     "name": "Odoo Brasil - Account Enterprise",
     "description": "Enable advanced tax management",
-    "version": "17.0.1.0.0",
+    "version": "17.0.1.0.1",
     "category": "Localization",
     "author": "Trustcode",
     "license": "Other OSI approved licence",
     "contributors": [
         "Danimar Ribeiro <danimaribeiro@gmail.com>",
+        "Daniel Paloschi <danielpaloschi.dev@gmail.com>",
     ],
     "depends": [
         "l10n_br_account",

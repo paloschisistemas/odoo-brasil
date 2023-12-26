@@ -22,7 +22,7 @@
                 </group>
             </group>
 
-            <xpath expr="//page[@name='account_mapping']/group" position="before">
+            <xpath expr="//page[@name='account_mapping']" position="inside">
                 <group>
                     <field name="journal_id" placeholder="Este diário vai ser usado no faturamento" />
                     <field name="account_id" placeholder="Esta conta vai ser usada para faturamento" />

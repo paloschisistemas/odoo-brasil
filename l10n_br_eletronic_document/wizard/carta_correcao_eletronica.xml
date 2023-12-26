@@ -11,7 +11,7 @@
                     <field name="sequential"/>
                     <field name="correcao"/>
                 </group>
-                <group states="error" string="Resultado Envio">
+                <group invisible="state != 'error'" string="Resultado Envio">
                     <field name="message" />
                     <field name="sent_xml_name" invisible="1"/>
                     <field name="sent_xml" filename="sent_xml_name"/>

@@ -4,7 +4,7 @@
 
 {
     'name': 'Integração Iugu',
-    'version': '17.0.1.0.1',
+    'version': '17.0.1.0.2',
     'category': 'Finance',
     'sequence': 5,
     'author': 'Trustcode',
@@ -14,7 +14,8 @@
     'website': 'https://www.trustcode.com.br',
     'support': 'comercial@trustcode.com.br',
     'contributors': [
-        'Danimar Ribeiro <danimaribeiro@gmail.com>'
+        'Danimar Ribeiro <danimaribeiro@gmail.com>',
+        'Daniel Paloschi <danielpaloschi.dev@gmail.com>',
     ],
     'depends': [
         'account',

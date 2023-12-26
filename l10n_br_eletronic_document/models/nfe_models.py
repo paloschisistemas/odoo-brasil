@@ -21,11 +21,11 @@ class NfeReboque(models.Model):
 
     eletronic_document_id = fields.Many2one("eletronic.document", string="NFe")
     placa_veiculo = fields.Char(string="Placa", size=7)
-    uf_veiculo = fields.Char(string=u"UF Veículo", size=2)
+    uf_veiculo = fields.Char(string="UF Veículo", size=2)
     rntc = fields.Char(
         string="RNTC", size=20, help="Registro Nacional de Transportador de Carga"
     )
-    vagao = fields.Char(string=u"Vagão", size=20)
+    vagao = fields.Char(string="Vagão", size=20)
     balsa = fields.Char(string="Balsa", size=20)
 
 
@@ -35,10 +35,10 @@ class NfeVolume(models.Model):
 
     eletronic_document_id = fields.Many2one("eletronic.document", string="NFe")
     quantidade_volumes = fields.Integer(string="Qtde. Volumes")
-    especie = fields.Char(string=u"Espécie", size=60)
+    especie = fields.Char(string="Espécie", size=60)
     marca = fields.Char(string="Marca", size=60)
-    numeracao = fields.Char(string=u"Numeração", size=60)
-    peso_liquido = fields.Float(string=u"Peso Líquido")
+    numeracao = fields.Char(string="Numeração", size=60)
+    peso_liquido = fields.Float(string="Peso Líquido")
     peso_bruto = fields.Float(string="Peso Bruto")
 
 
@@ -55,7 +55,7 @@ class NFeCobrancaDuplicata(models.Model):
         readonly=True,
         store=True,
     )
-    numero_duplicata = fields.Char(string=u"Número Duplicata", size=60)
+    numero_duplicata = fields.Char(string="Número Duplicata", size=60)
     data_vencimento = fields.Date(string="Data Vencimento")
     valor = fields.Monetary(string="Valor Duplicata")
 
@@ -78,23 +78,14 @@ class CartaCorrecaoEletronicaEvento(models.Model):
     protocolo = fields.Char(string="Protocolo", size=60)
 
 
-STATE = {"edit": [("readonly", False)], "draft": [("readonly", False)]}
-
-
 class InutilizedNfe(models.Model):
     _name = "invoice.eletronic.inutilized"
     _description = "NF-e inutilizada"
 
-    name = fields.Char("Nome", required=True, readonly=True, states=STATE)
-    numeration_start = fields.Integer(
-        "Número Inicial", required=True, readonly=True, states=STATE
-    )
-    numeration_end = fields.Integer(
-        "Número Final", required=True, readonly=True, states=STATE
-    )
-    justificativa = fields.Text(
-        "Justificativa", required=True, readonly=True, states=STATE
-    )
+    name = fields.Char("Nome", required=True)
+    numeration_start = fields.Integer("Número Inicial", required=True)
+    numeration_end = fields.Integer("Número Final", required=True)
+    justificativa = fields.Text("Justificativa", required=True)
     state = fields.Selection(
         [
             ("draft", "Provisório"),
@@ -102,17 +93,18 @@ class InutilizedNfe(models.Model):
             ("error", "Erro"),
             ("edit", "Editando"),
         ],
-        string=u"State",
+        string="State",
         default="edit",
         required=True,
         readonly=True,
     )
     modelo = fields.Selection(
-        [("55", "55 - NFe"), ("65", "65 - NFCe"),],
+        [
+            ("55", "55 - NFe"),
+            ("65", "65 - NFCe"),
+        ],
         string="Modelo",
         required=True,
-        readonly=True,
-        states=STATE,
     )
     serie = fields.Integer(string="Série")
     code = fields.Char(string="Código", size=10)
@@ -120,12 +112,15 @@ class InutilizedNfe(models.Model):
     sent_xml = fields.Binary(string="Xml Envio", readonly=True)
     sent_xml_name = fields.Char(string="Nome Xml Envio", size=100, readonly=True)
     received_xml = fields.Binary(string="Xml Recebimento", readonly=True)
-    received_xml_name = fields.Char(string="Nome Xml Recebimento", size=100, readonly=True)
+    received_xml_name = fields.Char(
+        string="Nome Xml Recebimento", size=100, readonly=True
+    )
 
-    @api.model
-    def create(self, vals):
-        vals["state"] = "draft"
-        return super(InutilizedNfe, self).create(vals)
+    @api.model_create_multi
+    def create(self, vals_list):
+        for vals in vals_list:
+            vals["state"] = "draft"
+        return super(InutilizedNfe, self).create(vals_list)
 
     def validate_hook(self):
         errors = []
@@ -256,7 +251,9 @@ class InutilizedNfe(models.Model):
         retorno = self.send_sefaz()
         if retorno:
             return retorno
-        return self.env.ref("l10n_br_eletronic_document.action_invoice_eletronic_inutilized").read()[0]
+        return self.env.ref(
+            "l10n_br_eletronic_document.action_invoice_eletronic_inutilized"
+        ).read()[0]
 
     def _create_attachment(self, prefix, event, data):
         file_name = "%s-%s.xml" % (prefix, datetime.now().strftime("%Y-%m-%d-%H-%M"))
@@ -265,9 +262,8 @@ class InutilizedNfe(models.Model):
                 "name": file_name,
                 "datas": base64.b64encode(data.encode("utf-8")),
                 "store_fname": file_name,
-                "description": u"",
+                "description": "",
                 "res_model": "invoice.eletronic.inutilized",
                 "res_id": event.id,
             }
         )
-

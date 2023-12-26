@@ -8,10 +8,10 @@
         <field name="arch" type="xml">
             <tree string="Séries Inutilizadas">
                 <field name="state" />
-                <field name="name" />
-                <field name="numeration_start" />
-                <field name="numeration_end" />
-                <field name="justificativa" />
+                <field name="name" readonly="state not in ['edit', 'draft']" />
+                <field name="numeration_start" readonly="state not in ['edit', 'draft']" />
+                <field name="numeration_end" readonly="state not in ['edit', 'draft']" />
+                <field name="justificativa" readonly="state not in ['edit', 'draft']"/>
             </tree>
         </field>
     </record>
@@ -24,30 +24,30 @@
             <form string="Séries Inutilizadas">
                 <header>
                     <button name="action_send_inutilization" type="object" class="oe_highlight" icon="fa-paper-plane"
-                        string="Enviar" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                        string="Enviar" invisible="state != 'draft'"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,done,error" />
                 </header>
                 <h1>
-                    <field name="name" class="oe_inline"/>
+                    <field name="name" class="oe_inline" readonly="state not in ['edit', 'draft']" />
                 </h1>
                 <group>
                     <group name="numeracao">
-                        <field name="numeration_start" />
-                        <field name="numeration_end" />
+                        <field name="numeration_start" readonly="state not in ['edit', 'draft']" />
+                        <field name="numeration_end" readonly="state not in ['edit', 'draft']" />
                     </group>
                     <group name="dados">
-                        <field name="modelo" />
+                        <field name="modelo" readonly="state not in ['edit', 'draft']"/>
                         <field name="serie" />
                     </group>
                 </group>
                 <group name="justificativa">
-                    <field name="justificativa" />
+                    <field name="justificativa" readonly="state not in ['edit', 'draft']" />
                 </group>
                 <group>
                     <field name="code"/>
                     <field name="motive"/>
                 </group>
-                <group name="erro" states="error">
+                <group name="erro" invisible="state != 'error'">
                     <field name="code" />
                     <field name="motive" />
                     <field name="sent_xml_name" invisible="1"/>

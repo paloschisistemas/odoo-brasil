@@ -12,7 +12,7 @@ class WizardChangeIuguInvoice(models.TransientModel):
 
     payment_due = fields.Boolean(string="Pagamento Atrasado?")
     date_change = fields.Date(string='Alterar Vencimento')
-    move_line_id = fields.Many2one('account.move.line', readonly=1)
+    move_line_id = fields.Many2one('account.move.line', readonly=True)
 
     def action_change_invoice_iugu(self):
         if self.move_line_id.reconciled:
