@@ -5,13 +5,14 @@
     'name': 'NFC-e - Point of Sale Brazil',
     'summary': """Module to adapt Odoo Point of Sale to Brazil""",
     'description': 'Point of Sale Brazil',
-    'version': '17.0.1.0.0',
+    'version': '17.0.1.0.1',
     'category': 'pos',
     'author': 'Trustcode',
     'license': 'Other OSI approved licence',
     'website': 'http://www.trustcode.com.br',
     'contributors': [
-        'Danimar Ribeiro <danimaribeiro@gmail.com>'
+        'Danimar Ribeiro <danimaribeiro@gmail.com>',
+        'Daniel Paloschi <danielpaloschi.dev@gmail.com',
     ],
     'depends': [
         'point_of_sale',

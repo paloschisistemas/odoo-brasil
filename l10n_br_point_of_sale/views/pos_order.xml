@@ -10,10 +10,10 @@
                 <field name="sending_nfe" invisible="1" />
                 <field name="nfe_exception" invisible="1" />
                 <div class="alert alert-danger" role="alert" style="margin-bottom:0px;"
-                    attrs="{'invisible': ['|', ('ambiente_nfe', '==', '1')]}">
+                    invisible="ambiente_nfe == '1'">
                     A NFC-e está em ambiente de homologação
                 </div>
-                <div class="alert alert-success" role="alert" style="margin-bottom:0px;" attrs="{'invisible': [('sending_nfe', '==', False)]}">
+                <div class="alert alert-success" role="alert" style="margin-bottom:0px;" invisible="sending_nfe == False">
                     Sua <b>NFC-e de número <field name="nfe_number" class="oe_inline"/></b> está na fila de envio.
                     <button name="action_view_edocs" type="object" class="label label-primary"
                         context="{ 'search_default_invoice_id': id }" string="Visualizar Fila">
@@ -23,7 +23,7 @@
                         context="{ 'search_default_invoice_id': id }" string="Enviar Agora">
                     </button>
                 </div>
-                <div class="alert alert-danger" role="alert" style="margin-bottom:0px;" attrs="{'invisible': [('nfe_exception', '==', False)]}">
+                <div class="alert alert-danger" role="alert" style="margin-bottom:0px;" invisible="nfe_exception == False">
                     Ocorreu um erro com a <b>NFC-e de número <field name="nfe_exception_number" class="oe_inline"/>. </b>
                     <button name="action_view_edocs" type="object" class="label label-primary"
                         context="{ 'search_default_invoice_id': id }" string="Visualizar NFe">
@@ -35,12 +35,12 @@
 
             <div name="button_box" position="inside">
                 <button name="action_view_edocs" type="object" class="oe_stat_button" icon="fa-file-text-o"
-                    attrs="{'invisible': [('state', '==', 'draft')]}">
+                    invisible="state == 'draft'">
                     <field name="total_edocs" /> <span> E-Docs</span>
                 </button>
                 <button name="action_preview_danfe" type="object" class="oe_stat_button" icon="fa-file-pdf-o"
                    string="Imprimir Danfe"
-                   attrs="{'invisible': [('total_edocs', '=', 0)]}">
+                   invisible="total_edocs == 0">
                </button>
             </div>
 
