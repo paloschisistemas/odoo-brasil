@@ -8,7 +8,8 @@
     "website": "http://www.code137.com.br",
     "contributors": [
         "Fábio Luna <fabiocluna@hotmail.com>",
-        "Felipe Paloschi <paloschi.eca@gmail.com>"
+        "Felipe Paloschi <paloschi.eca@gmail.com>",
+        "Daniel Paloschi <danielpaloschi.dev@gmail.com>",
     ],
     "depends": [
         "stock_account",
