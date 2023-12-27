@@ -647,7 +647,7 @@ class EletronicDocument(models.Model):
     def action_generate_xml(self):
         if self.state in ("draft", "error"):
             cert = self.company_id.with_context({"bin_size": False}).l10n_br_certificate
-            cert_pfx = base64.decodestring(cert)
+            cert_pfx = base64.decodebytes(cert)
             certificado = Certificado(cert_pfx, self.company_id.l10n_br_cert_password)
 
             nfe_values = self._prepare_eletronic_invoice_values()

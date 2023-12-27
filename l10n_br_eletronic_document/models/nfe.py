@@ -847,7 +847,7 @@ class EletronicDocument(models.Model):
         self.chave_nfe = gerar_chave(ChaveNFe(**chave_dict))
 
         cert = self.company_id.with_context({"bin_size": False}).l10n_br_certificate
-        cert_pfx = base64.decodestring(cert)
+        cert_pfx = base64.decodebytes(cert)
 
         certificado = Certificado(cert_pfx, self.company_id.l10n_br_cert_password)
 
@@ -890,11 +890,11 @@ class EletronicDocument(models.Model):
         self.write({"state": "error", "data_emissao": datetime.now()})
 
         cert = self.company_id.with_context({"bin_size": False}).l10n_br_certificate
-        cert_pfx = base64.decodestring(cert)
+        cert_pfx = base64.decodebytes(cert)
 
         certificado = Certificado(cert_pfx, self.company_id.l10n_br_cert_password)
 
-        xml_to_send = base64.decodestring(self.xml_to_send).decode("utf-8")
+        xml_to_send = base64.decodebytes(self.xml_to_send).decode("utf-8")
 
         resposta_recibo = None
         resposta = autorizar_nfe(
@@ -1014,8 +1014,8 @@ class EletronicDocument(models.Model):
             )
             if nfe_envio.datas and recibo.datas:
                 nfe_proc = gerar_nfeproc(
-                    base64.decodestring(nfe_envio.datas).decode("utf-8"),
-                    base64.decodestring(recibo.datas).decode("utf-8"),
+                    base64.decodebytes(nfe_envio.datas).decode("utf-8"),
+                    base64.decodebytes(recibo.datas).decode("utf-8"),
                 )
                 self.sudo().write(
                     {
@@ -1071,7 +1071,7 @@ class EletronicDocument(models.Model):
 
         _logger.info("Cancelling NF-e (%s)" % self.numero)
         cert = self.company_id.with_context({"bin_size": False}).l10n_br_certificate
-        cert_pfx = base64.decodestring(cert)
+        cert_pfx = base64.decodebytes(cert)
         certificado = Certificado(cert_pfx, self.company_id.l10n_br_cert_password)
 
         id_canc = "ID110111%s%02d" % (self.chave_nfe, self.sequencial_evento)
@@ -1131,7 +1131,7 @@ class EletronicDocument(models.Model):
 
         self._create_attachment("canc", self, resp["sent_xml"])
         self._create_attachment("canc-ret", self, resp["received_xml"])
-        nfe_processada = base64.decodestring(self.nfe_processada)
+        nfe_processada = base64.decodebytes(self.nfe_processada)
 
         nfe_proc_cancel = gerar_nfeproc_cancel(
             nfe_processada, resp["received_xml"].encode()
@@ -1145,7 +1145,7 @@ class EletronicDocument(models.Model):
 
     def action_get_status(self):
         cert = self.company_id.with_context({"bin_size": False}).l10n_br_certificate
-        cert_pfx = base64.decodestring(cert)
+        cert_pfx = base64.decodebytes(cert)
         certificado = Certificado(cert_pfx, self.company_id.l10n_br_cert_password)
         consulta = {
             "estado": self.company_id.state_id.l10n_br_ibge_code,
@@ -1166,7 +1166,7 @@ class EletronicDocument(models.Model):
 
             self._create_attachment("canc", self, resp["sent_xml"])
             self._create_attachment("canc-ret", self, resp["received_xml"])
-            nfe_processada = base64.decodestring(self.nfe_processada)
+            nfe_processada = base64.decodebytes(self.nfe_processada)
 
             nfe_proc_cancel = gerar_nfeproc_cancel(
                 nfe_processada, resp["received_xml"].encode()

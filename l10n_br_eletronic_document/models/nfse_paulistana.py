@@ -64,7 +64,7 @@ def _convert_values(vals):
 
 
 def send_api(certificate, password, edocs):
-    cert_pfx = base64.decodestring(certificate)
+    cert_pfx = base64.decodebytes(certificate)
     certificado = Certificado(cert_pfx, password)
 
     nfse_values = _convert_values(edocs)
@@ -101,7 +101,7 @@ def send_api(certificate, password, edocs):
 
 
 def cancel_api(certificate, password, vals):
-    cert_pfx = base64.decodestring(certificate)
+    cert_pfx = base64.decodebytes(certificate)
     certificado = Certificado(cert_pfx, password)
     canc = {
         "cnpj_remetente": vals["cnpj_cpf"],

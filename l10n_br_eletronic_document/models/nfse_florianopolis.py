@@ -38,7 +38,7 @@ def _convert_values(vals):
 
 
 def send_api(certificate, password, list_rps):
-    cert_pfx = base64.decodestring(certificate)
+    cert_pfx = base64.decodebytes(certificate)
     certificado = Certificado(cert_pfx, password)
 
     vals = list_rps[0]
@@ -73,7 +73,7 @@ def send_api(certificate, password, list_rps):
 
 
 def cancel_api(certificate, password, vals):
-    cert_pfx = base64.decodestring(certificate)
+    cert_pfx = base64.decodebytes(certificate)
     certificado = Certificado(cert_pfx, password)
     canc = {
         "motivo": vals["justificativa"],

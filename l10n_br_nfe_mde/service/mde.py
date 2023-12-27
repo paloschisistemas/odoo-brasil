@@ -18,7 +18,7 @@ except ImportError:
 
 def __certificado(company):
     cert = company.with_context({'bin_size': False}).l10n_br_certificate
-    cert_pfx = base64.decodestring(cert)
+    cert_pfx = base64.decodebytes(cert)
     certificado = Certificado(cert_pfx, company.l10n_br_cert_password)
     return certificado
 

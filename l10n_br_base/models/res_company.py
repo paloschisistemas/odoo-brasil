@@ -21,7 +21,7 @@ class ResCompany(models.Model):
             company.l10n_br_cert_information = ""
             company.l10n_br_cert_expire_date = None
             try:
-                pfx = base64.decodestring(
+                pfx = base64.decodebytes(
                     company.with_context(bin_size=False).l10n_br_certificate
                 )
                 pfx = crypto.load_pkcs12(pfx, company.l10n_br_cert_password)
