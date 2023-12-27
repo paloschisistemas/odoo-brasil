@@ -4,11 +4,11 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock" />
         <field name="arch" type="xml">
-            <field name="tax_totals_json" position="after">
+            <field name="tax_totals" position="after">
                 <div class="oe_subtotal_footer_separator oe_inline o_td_label"></div>
                 <field name="l10n_br_delivery_amount" />
-                <field name="l10n_br_expense_amount" />
-                <field name="l10n_br_insurance_amount" />
+                <field name="l10n_br_expense_amount" readonly="state != 'draft'"/>
+                <field name="l10n_br_insurance_amount" readonly="state != 'draft'"/>
             </field>
             <field name="picking_policy" position="before">
                 <field name="modalidade_frete" />

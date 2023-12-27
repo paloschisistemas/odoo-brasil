@@ -22,7 +22,7 @@ class BancoInter(models.AbstractModel):
     _description = "Banco Inter Operations"
 
     def _generate_cert_files(self, journal_id):
-        """ Generate the temp files for cert and key.
+        """Generate the temp files for cert and key.
 
         :param  journal_id (obj): Banco Inter Journal
 
@@ -70,24 +70,24 @@ class BancoInter(models.AbstractModel):
         return session
 
     def _check_existing_token(self):
-        IrParamSudo = self.env['ir.config_parameter'].sudo()
-        expiration = IrParamSudo.get_param('bancointer.token.expiration')
+        IrParamSudo = self.env["ir.config_parameter"].sudo()
+        expiration = IrParamSudo.get_param("bancointer.token.expiration")
         if not expiration:
             return False
         expiration = datetime.fromisoformat(expiration)
         if expiration < datetime.now():
             return False
-        token = IrParamSudo.get_param('bancointer.token')
+        token = IrParamSudo.get_param("bancointer.token")
         return token
 
     def _save_token(self, token):
-        IrParamSudo = self.env['ir.config_parameter'].sudo()
-        IrParamSudo.set_param('bancointer.token', token)
+        IrParamSudo = self.env["ir.config_parameter"].sudo()
+        IrParamSudo.set_param("bancointer.token", token)
         expiration = datetime.now() + timedelta(hours=1)
-        IrParamSudo.set_param('bancointer.token.expiration', expiration.isoformat())
+        IrParamSudo.set_param("bancointer.token.expiration", expiration.isoformat())
 
     def _get_token(self, journal_id, scope):
-        """ Get the Banco Inter access token
+        """Get the Banco Inter access token
 
         :param journal_id (obj): Banco Inter Journal
         :param scope (str): Token Scope [cobranca_add, cobranca_cancel, cobranca_get]
@@ -98,18 +98,18 @@ class BancoInter(models.AbstractModel):
         if token:
             return token
 
-        url = BASE_URL + 'oauth/v2/token'
+        url = BASE_URL + "oauth/v2/token"
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
         client_id = journal_id.l10n_br_inter_client_id
         client_secret = journal_id.l10n_br_inter_client_secret
 
         body = (
-            "client_id={client_id}&" +
-            "client_secret={client_secret}&" +
-            "scope={scope}&" +
-            "grant_type=client_credentials").format(
-            client_id=client_id, client_secret=client_secret, scope=SCOPE[scope])
+            "client_id={client_id}&"
+            + "client_secret={client_secret}&"
+            + "scope={scope}&"
+            + "grant_type=client_credentials"
+        ).format(client_id=client_id, client_secret=client_secret, scope=SCOPE[scope])
 
         session = self._prepare_session_request(journal_id)
         response = session.post(url, headers=headers, data=body)
@@ -137,50 +137,49 @@ class BancoInter(models.AbstractModel):
         if response.status_code == 200:
             return response.json().get("nossoNumero")
         elif response.status_code == 401:
-            raise UserError(
-                "Erro de autorização ao consultar a API do Banco Inter")
+            raise UserError("Erro de autorização ao consultar a API do Banco Inter")
         else:
             raise UserError(
-                'Houve um erro com a API do Banco Inter:\n%s' % response.text)
+                "Houve um erro com a API do Banco Inter:\n%s" % response.text
+            )
 
-    def cancel_boleto_inter(self, journal_id, acquirer_reference):
-        """ Cancel bank slip in Banco Inter
+    def cancel_boleto_inter(self, journal_id, provider_reference):
+        """Cancel bank slip in Banco Inter
 
         :param  journal_id (obj): Banco Inter Journal
-        :param acquirer_reference (str): Bank slip ID in Banco Inter
+        :param provider_reference (str): Bank slip ID in Banco Inter
 
         :return: True
         """
-        url = BASE_URL + \
-            "cobranca/v2/boletos/{nosso_numero}/cancelar".format(
-                nosso_numero=acquirer_reference)
+        url = BASE_URL + "cobranca/v2/boletos/{nosso_numero}/cancelar".format(
+            nosso_numero=provider_reference
+        )
 
         token = self._get_token(journal_id, "cobranca_cancel")
         headers = self._generate_header(token)
-        vals = {
-            "motivoCancelamento": "SUBSTITUICAO"
-        }
+        vals = {"motivoCancelamento": "SUBSTITUICAO"}
         session = self._prepare_session_request(journal_id)
 
         response = session.post(url, headers=headers, data=json.dumps(vals))
 
         if response.status_code != 204:
             raise UserError(
-                'Houve um erro com a API do Banco Inter:\n%s' % response.text)
+                "Houve um erro com a API do Banco Inter:\n%s" % response.text
+            )
 
         return True
 
-    def get_boleto_inter_status(self, journal_id, acquirer_reference):
-        """ Get the bank slip status in Banco Inter
+    def get_boleto_inter_status(self, journal_id, provider_reference):
+        """Get the bank slip status in Banco Inter
 
         :param  journal_id (obj): Banco Inter Journal
-        :param acquirer_reference (str): Bank slip ID in Banco Inter
+        :param provider_reference (str): Bank slip ID in Banco Inter
 
         :return (str): Bank slip status
         """
-        url = BASE_URL + \
-            "cobranca/v2/boletos/{nosso_numero}".format(
-                nosso_numero=acquirer_reference)
+        url = BASE_URL + "cobranca/v2/boletos/{nosso_numero}".format(
+            nosso_numero=provider_reference
+        )
 
         token = self._get_token(journal_id, "cobranca_get")
         headers = self._generate_header(token)
@@ -193,17 +192,17 @@ class BancoInter(models.AbstractModel):
 
         return response.json().get("situacao")
 
-    def get_boleto_inter_pdf(self, journal_id, acquirer_reference):
-        """ Get the bank slip PDF in Banco Inter
+    def get_boleto_inter_pdf(self, journal_id, provider_reference):
+        """Get the bank slip PDF in Banco Inter
 
         :param  journal_id (obj): Banco Inter Journal
-        :param acquirer_reference (str): Bank slip ID in Banco Inter
+        :param provider_reference (str): Bank slip ID in Banco Inter
 
         :return (str): Bank slip PDF
         """
-        url = BASE_URL + \
-            "cobranca/v2/boletos/{nosso_numero}/pdf".format(
-                nosso_numero=acquirer_reference)
+        url = BASE_URL + "cobranca/v2/boletos/{nosso_numero}/pdf".format(
+            nosso_numero=provider_reference
+        )
 
         # Get the token
         token = self._get_token(journal_id, "cobranca_get")
@@ -218,7 +217,7 @@ class BancoInter(models.AbstractModel):
         return response.json().get("pdf")
 
     def get_bank_statement_inter(self, journal_id, start_date, end_date):
-        """ Get the bank statement for Banco Inter
+        """Get the bank statement for Banco Inter
 
         :param  journal_id (obj): Banco Inter Journal
         :param start_date (str): Start date
@@ -234,7 +233,10 @@ class BancoInter(models.AbstractModel):
         session = self._prepare_session_request(journal_id)
 
         # Get the transaction list
-        params = {"dataInicio": start_date.strftime("%Y-%m-%d"), "dataFim": end_date.strftime("%Y-%m-%d")}
+        params = {
+            "dataInicio": start_date.strftime("%Y-%m-%d"),
+            "dataFim": end_date.strftime("%Y-%m-%d"),
+        }
         response = session.get(url, headers=headers, params=params)
         response.raise_for_status()
         transactions = response.json()["transacoes"]
@@ -254,4 +256,8 @@ class BancoInter(models.AbstractModel):
         response.raise_for_status()
         end_balance = response.json()["disponivel"]
 
-        return {"start_balance": start_balance, "end_balance": end_balance, "transactions": transactions}
+        return {
+            "start_balance": start_balance,
+            "end_balance": end_balance,
+            "transactions": transactions,
+        }

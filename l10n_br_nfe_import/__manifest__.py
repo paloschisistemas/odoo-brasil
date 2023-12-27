@@ -1,6 +1,6 @@
 {  # pylint: disable=C8101,C8103
     "name": "Importação de Documento Fiscal Eletronico",
-    "version": "17.0.1.0.1",
+    "version": "17.0.1.0.2",
     "category": "Account addons",
     "license": "AGPL-3",
     "author": "Trustcode",
@@ -9,6 +9,7 @@
         Implementa funcionalidade para importar xml da nfe.""",
     "contributors": [
         "Danimar Ribeiro <danimaribeiro@gmail.com>",
+        "Daniel Paloschi <danielpaloschi.dev@gmail.com>",
     ],
     "depends": ["sale", "l10n_br_eletronic_document"],
     "data": [

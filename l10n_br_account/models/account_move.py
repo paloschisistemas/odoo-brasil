@@ -116,9 +116,7 @@ class AccountMove(models.Model):
         elif line:
             line.unlink()
         elif self[amount_field_name] > 0:
-            product_external_id = "l10n_br_account.product_product_{}".format(
-                line_type
-            )
+            product_external_id = "l10n_br_account.product_product_{}".format(line_type)
             product = self.env.ref(product_external_id)
             self.update(
                 {
@@ -221,9 +219,7 @@ class AccountMoveLine(models.Model):
             or self.l10n_br_is_insurance
         )
 
-    @api.depends(
-        "debit", "credit", "account_id.account_type", "amount_residual"
-    )
+    @api.depends("debit", "credit", "account_id.account_type", "amount_residual")
     def _compute_payment_value(self):
         for item in self:
             item.l10n_br_payment_value = (

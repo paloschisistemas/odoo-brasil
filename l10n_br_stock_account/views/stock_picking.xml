@@ -27,7 +27,7 @@
     <field name="inherit_id" ref="stock.view_picking_form" />
     <field name="arch" type="xml">
       <div name="button_box" position="inside">
-        <button name="action_stock_account_invoice" type="object" class="oe_stat_button" icon="fa-file-text-o" context="{ 'default_l10n_br_picking_origin_id': id }" attrs="{'invisible': [('invoice_count', '=', 0)]}">
+        <button name="action_stock_account_invoice" type="object" class="oe_stat_button" icon="fa-file-text-o" context="{ 'default_l10n_br_picking_origin_id': id }" invisible="invoice_count == 0">
           <field name="invoice_count" />
           <span> Invoices</span>
         </button>
@@ -35,7 +35,7 @@
       <page name="extra" position="inside">
         <group string="Invoice" name="invoice">
           <field name="enable_invoicing"></field>
-          <field name="fiscal_position_id" attrs="{'invisible': [('enable_invoicing', '=', False)]}"></field>
+          <field name="fiscal_position_id" invisible="enable_invoicing == False"></field>
         </group>
       </page>
     </field>

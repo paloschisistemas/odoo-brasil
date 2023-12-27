@@ -3,7 +3,7 @@
 
 import base64
 import iugu
-from odoo import api, fields, models
+from odoo import fields, models
 from odoo.exceptions import UserError
 import logging
 _logger = logging.getLogger(__name__)
@@ -29,15 +29,15 @@ class PaymentTransaction(models.Model):
                     doc.id, str(e)), exc_info=True)
 
     def action_verify_transaction(self):
-        if self.acquirer_id.provider != 'iugu':
+        if self.provider_id.code != 'iugu':
             return
-        if not self.acquirer_reference:
+        if not self.provider_reference:
             raise UserError('Esta transação não foi enviada a nenhum gateway de pagamento')
         token = self.env.company.iugu_api_token
         iugu.config(token=token)
         iugu_invoice_api = iugu.Invoice()
 
-        data = iugu_invoice_api.search(self.acquirer_reference)
+        data = iugu_invoice_api.search(self.provider_reference)
         if "errors" in data:
             raise UserError(data['errors'])
         if data.get('status', '') == 'paid' and self.state not in ('done', 'authorized'):
@@ -50,16 +50,16 @@ class PaymentTransaction(models.Model):
             self.iugu_status = data['status']
 
     def cancel_transaction_in_iugu(self):
-        if not self.acquirer_reference:
+        if not self.provider_reference:
             raise UserError('Esta parcela não foi enviada ao IUGU')
         token = self.env.company.iugu_api_token
         iugu.config(token=token)
         iugu_invoice_api = iugu.Invoice()
-        iugu_invoice_api.cancel(self.acquirer_reference)
+        iugu_invoice_api.cancel(self.provider_reference)
 
     def action_cancel_transaction(self):
         self._set_transaction_cancel()
-        if self.acquirer_id.provider == 'iugu':
+        if self.provider_id.code == 'iugu':
             self.cancel_transaction_in_iugu()
 
     def _find_attachment_ids_email(self):

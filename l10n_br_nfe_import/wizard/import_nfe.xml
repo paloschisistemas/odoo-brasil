@@ -6,20 +6,20 @@
         <field name="arch" type="xml">
             <form string="Importa xml">
                 <field name="state" invisible="1" />
-                <group states="ok">
+                <group invisible="state != 'ok'">
                     <field name="import_batch_zip"/>
-                    <field name="nfe_xml" attrs="{'invisible': [('import_batch_zip', '=', True)]}"/>
-                    <field name="skip_wrong_xml" attrs="{'invisible': [('import_batch_zip', '=', False)]}"/>
-                    <field name="zip_file" attrs="{'invisible': [('import_batch_zip', '=', False)]}"/>
+                    <field name="nfe_xml" invisible="import_batch_zip == True"/>
+                    <field name="skip_wrong_xml" invisible="import_batch_zip == False"/>
+                    <field name="zip_file" invisible="import_batch_zip == False"/>
                   </group>
-                <group states="error">
+                <group invisible="state != 'error'">
                     <div>
                         O arquivo zip abaixo contém os arquivos xml que não foram importados!
                     </div>
                     <field name="zip_file_error_name" invisible="1" />
                     <field name="zip_file_error" filename="zip_file_error_name"/>
                 </group>
-                <footer states="ok">
+                <footer invisible="state != 'ok'">
                     <button name="action_import_nfe"
                         string="Importar" type="object"
                         class="oe_highlight" />

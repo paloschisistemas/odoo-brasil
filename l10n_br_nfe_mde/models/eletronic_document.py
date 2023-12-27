@@ -1,7 +1,5 @@
 from odoo import fields, models
 
-STATE = {'edit': [('readonly', False)]}
-
 
 class EletronicDocument(models.Model):
     _inherit = 'eletronic.document'
@@ -15,5 +13,4 @@ class EletronicDocument(models.Model):
 #     _inherit = 'invoice.eletronic.event'
 
 #     nfe_mde_id = fields.Many2one(
-#         'nfe.mde', string=u"Manifesto Eletrônico",
-#         readonly=True, states=STATE)
+#         'nfe.mde', string=u"Manifesto Eletrônico")

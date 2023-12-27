@@ -1,7 +1,5 @@
 from odoo import models, fields, api
 
-STATES = {"draft": [("readonly", False)]}
-
 
 def compute_partition_amount(amount, line_amount, total_amount):
     if total_amount > 0:
@@ -16,22 +14,16 @@ class PurchaseOrder(models.Model):
         string="Frete",
         compute="_compute_l10n_br_delivery_amount",
         inverse="_inverse_l10n_br_delivery_amount",
-        readonly=True,
-        states=STATES,
     )
     l10n_br_expense_amount = fields.Monetary(
         string="Despesa",
         compute="_compute_l10n_br_expense_amount",
         inverse="_inverse_l10n_br_expense_amount",
-        readonly=True,
-        states=STATES,
     )
     l10n_br_insurance_amount = fields.Monetary(
         string="Seguro",
         compute="_compute_l10n_br_insurance_amount",
         inverse="_inverse_l10n_br_insurance_amount",
-        readonly=True,
-        states=STATES,
     )
 
     def compute_lines_partition(self, line_type):
@@ -75,9 +67,7 @@ class PurchaseOrder(models.Model):
         elif line:
             line.unlink()
         elif self[amount_field_name] > 0:
-            product_external_id = "l10n_br_account.product_product_{}".format(
-                line_type
-            )
+            product_external_id = "l10n_br_account.product_product_{}".format(line_type)
             product = self.env.ref(product_external_id)
             self.write(
                 {
@@ -112,9 +102,7 @@ class PurchaseOrder(models.Model):
     )
     def _compute_l10n_br_delivery_amount(self):
         for item in self:
-            delivery_line = item.order_line.filtered(
-                lambda x: x.l10n_br_is_delivery
-            )
+            delivery_line = item.order_line.filtered(lambda x: x.l10n_br_is_delivery)
             item.l10n_br_delivery_amount = delivery_line.price_total
             item.compute_lines_partition("delivery")
 
@@ -129,9 +117,7 @@ class PurchaseOrder(models.Model):
     )
     def _compute_l10n_br_expense_amount(self):
         for item in self:
-            expense_line = item.order_line.filtered(
-                lambda x: x.l10n_br_is_expense
-            )
+            expense_line = item.order_line.filtered(lambda x: x.l10n_br_is_expense)
             item.l10n_br_expense_amount = expense_line.price_total
             item.compute_lines_partition("expense")
 
@@ -146,9 +132,7 @@ class PurchaseOrder(models.Model):
     )
     def _compute_l10n_br_insurance_amount(self):
         for item in self:
-            insurance_line = item.order_line.filtered(
-                lambda x: x.l10n_br_is_insurance
-            )
+            insurance_line = item.order_line.filtered(lambda x: x.l10n_br_is_insurance)
             item.l10n_br_insurance_amount = insurance_line.price_total
             item.compute_lines_partition("insurance")
 
@@ -184,9 +168,7 @@ class PurchaseOrderLine(models.Model):
             fpos = line.order_id.fiscal_position_id
             if not fpos:
                 continue
-            line.taxes_id = (
-                line.taxes_id | fpos.apply_tax_ids
-            )
+            line.taxes_id = line.taxes_id | fpos.apply_tax_ids
 
     def _prepare_account_move_line(self, move=False):
         res = super(PurchaseOrderLine, self)._prepare_account_move_line(move)

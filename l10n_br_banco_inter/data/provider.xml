@@ -1,8 +1,8 @@
 <odoo>
     <data noupdate="1">
-        <record id="payment_acquirer_boleto_inter" model="payment.acquirer">
+        <record id="payment_provider_boleto_inter" model="payment.provider">
             <field name="name">Boleto Inter</field>
-            <field name="provider">boleto-inter</field>
+            <field name="code">boleto-inter</field>
             <field name="company_id" ref="base.main_company"/>
             <field name="description" type="html">
                 <p>

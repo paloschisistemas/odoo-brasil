@@ -6,7 +6,7 @@
     'name': 'Plano de Contas para Microempresa e Empresa de Pequeno Porte',
     'summary': "Plano de Contas para Microempresa e Empresa de Pequeno Porte",
     'description': """Plano de Contas para Microempresa e EPP""",
-    'version': '17.0.1.0.0',
+    'version': '17.0.1.0.1',
     'category': 'Accounting/Localizations/Account Charts',
     'author': 'Trustcode',
     'license': 'AGPL-3',
@@ -14,6 +14,7 @@
     'contributors': [
         'Danimar Ribeiro <danimaribeiro@gmail.com>',
         'Jonatas Biazus <jonatasbiazusct@gmail.com>',
+        'Daniel Paloschi <danielpaloschi.dev@gmail.com>',
     ],
     'depends': [
         'account',

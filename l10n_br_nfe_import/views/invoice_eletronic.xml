@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="l10n_br_eletronic_document.view_eletronic_document_form"/>
         <field name="arch" type="xml">
             <field name="state" position="before">
-                <button name="generate_account_move" states="imported" string="Terminar processo de importação" type="object" class="oe_highlight"/>
+                <button name="generate_account_move" invisible="state != 'imported'" string="Terminar processo de importação" type="object" class="oe_highlight"/>
             </field>
         </field>
     </record>
