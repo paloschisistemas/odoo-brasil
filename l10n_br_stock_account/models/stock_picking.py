@@ -32,7 +32,7 @@ class StockPicking(models.Model):
     def _prepare_inv_line_vals(self, move_line_id):
         linevals = {
             "product_id": move_line_id.product_id.id,
-            "quantity": move_line_id.qty_done,
+            "quantity": move_line_id.quantity,
             "price_unit": move_line_id.product_id.lst_price,
             "move_id": self.env["account.move"].new(
                 {
@@ -43,12 +43,11 @@ class StockPicking(models.Model):
             ),
         }
         line = self.env["account.move.line"].new(linevals)
-        line._onchange_product_id()
         linevals = line._convert_to_write({name: line[name] for name in line._cache})
         vals = {k: v for k, v in linevals.items() if v}
         vals.update(
             {
-                "quantity": move_line_id.qty_done,
+                "quantity": move_line_id.quantity,
                 "price_unit": move_line_id.product_id.lst_price,
             }
         )

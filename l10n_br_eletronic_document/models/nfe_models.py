@@ -234,7 +234,7 @@ class InutilizedNfe(models.Model):
         obj = self._prepare_obj(company=company, estado=estado, ambiente=ambiente)
 
         cert = company.with_context({"bin_size": False}).l10n_br_certificate
-        cert_pfx = base64.decodestring(cert)
+        cert_pfx = base64.decodebytes(cert)
         certificado = Certificado(cert_pfx, company.l10n_br_cert_password)
 
         resposta = inutilizar_nfe(

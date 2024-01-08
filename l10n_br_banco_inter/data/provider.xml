@@ -4,7 +4,7 @@
             <field name="name">Boleto Inter</field>
             <field name="code">boleto-inter</field>
             <field name="company_id" ref="base.main_company"/>
-            <field name="description" type="html">
+            <field name="pre_msg" type="html">
                 <p>
                     Emita boletos via Banco Inter. <br />
                     Simplifique seu recebimento, gere o boleto já registrado,

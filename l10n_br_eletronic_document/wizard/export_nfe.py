@@ -70,12 +70,12 @@ class ExportNfe(models.TransientModel):
         for invoice in invoice_ids:
             if invoice.nfe_processada:
                 xmls.append({
-                    'content': base64.decodestring(invoice.nfe_processada).decode(),
+                    'content': base64.decodebytes(invoice.nfe_processada).decode(),
                     'name': invoice.nfe_processada_name
                 })
             if invoice.nfse_pdf:
                 pdfs.append({
-                    'content': base64.decodestring(invoice.nfse_pdf),
+                    'content': base64.decodebytes(invoice.nfse_pdf),
                     'name': invoice.nfse_pdf_name
                 })
             if invoice.model == 'nfe':

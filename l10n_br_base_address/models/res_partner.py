@@ -98,7 +98,7 @@ class ResPartner(models.Model):
             if not company.l10n_br_certificate and not company.l10n_br_cert_password:
                 raise UserError(_("Configure the company's certificate and password"))
             cert = company.with_context({"bin_size": False}).l10n_br_certificate
-            cert_pfx = base64.decodestring(cert)
+            cert_pfx = base64.decodebytes(cert)
             certificado = Certificado(cert_pfx, company.l10n_br_cert_password)
             cnpj = re.sub("[^0-9]", "", self.l10n_br_cnpj_cpf)
             obj = {"cnpj": cnpj, "estado": self.state_id.code}

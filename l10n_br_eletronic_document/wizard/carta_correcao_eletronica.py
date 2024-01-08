@@ -82,7 +82,7 @@ class WizardCartaCorrecaoEletronica(models.TransientModel):
             }],
         }
         cert = self.eletronic_doc_id.company_id.with_context({'bin_size': False}).l10n_br_certificate
-        cert_pfx = base64.decodestring(cert)
+        cert_pfx = base64.decodebytes(cert)
         certificado = Certificado(cert_pfx, self.eletronic_doc_id.company_id.l10n_br_cert_password)
         resposta = recepcao_evento_carta_correcao(certificado, **carta)
 
