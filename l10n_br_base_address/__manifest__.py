@@ -1,13 +1,14 @@
 {  # pylint: disable=C8101,C8103
     'name': 'Odoo Next - Address Extension',
     'description': 'Modifies address forms',
-    'version': '13.0.1.0.0',
+    'version': '15.0.1.0.1',
     'category': 'Localization',
     'author': 'Trustcode',
     'license': 'OEEL-1',
     'website': 'http://www.odoo-next.com,br',
     'contributors': [
         'Danimar Ribeiro <danimaribeiro@gmail.com>',
+        'Daniel Paloschi <danielpaloschi.dev@gmail.com',
     ],
     'depends': [
         'account',
