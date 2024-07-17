@@ -58,7 +58,7 @@ class PaymentTransaction(models.Model):
         iugu_invoice_api.cancel(self.provider_reference)
 
     def action_cancel_transaction(self):
-        self._set_transaction_cancel()
+        self._set_canceled()
         if self.provider_id.code == 'iugu':
             self.cancel_transaction_in_iugu()
 
